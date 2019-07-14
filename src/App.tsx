@@ -2,25 +2,33 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import MapScreen from "./screens/MapScreen/MapScreen";
+import { Provider } from "react-redux";
+import Store from "./Services/store/Store";
+
+interface AppProps {}
+interface AppState {}
+
+class App extends React.Component<AppProps, AppState> {
+    render() {
+        return (
+            <Provider store={Store}>
+                <div
+                    style={{
+                        overflow: "auto",
+                        background: "#222",
+                        justifyContent: "space-between",
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        padding: 50
+                    }}
+                >
+                    <MapScreen />
+                </div>
+            </Provider>
+        );
+    }
 }
 
 export default App;
