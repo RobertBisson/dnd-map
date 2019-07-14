@@ -1,9 +1,12 @@
 import { createStore, combineReducers } from "redux";
 import { MapSets } from "../assetLoading/MapSets";
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/es/storage";
 
+import GridReducer from "./grid/GridReducer";
 const mapReducer = (
     state: any = {
-        activeMap: MapSets.goblinCave,
+        activeMap: null,
         inMapView: false
     },
     action: any
@@ -13,6 +16,7 @@ const mapReducer = (
             return {
                 ...state,
                 activeMap: MapSets[action.map],
+                activeMapKey: action.map,
                 inMapView: true
             };
         case "Map/SWITCH_VIEW":
@@ -25,9 +29,21 @@ const mapReducer = (
     }
 };
 const reducer = combineReducers({
-    map: mapReducer
+    map: mapReducer,
+    grid: persistReducer(
+        {
+            key: "grid",
+            storage
+        },
+        GridReducer
+    )
 });
 
-const Store = createStore(reducer);
+const Store = createStore(
+    reducer,
+    /* preloadedState, */
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
+);
 
-export default Store;
+let persistor = persistStore(Store);
+export { Store, persistor };

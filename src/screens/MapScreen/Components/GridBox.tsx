@@ -3,19 +3,21 @@ import { connect } from "react-redux";
 import { Droppable } from "react-beautiful-dnd";
 import { CharToken } from "components/CharToken";
 
+import { createSelector } from "reselect";
 interface GridBoxProps {
-    dropKey: string;
-    dropArray: any[];
+    gridKey: string;
+    items: any[];
     gridSize: number;
+    visible: boolean;
 }
 
 interface GridBoxState {}
 
-class GridBox extends React.PureComponent<GridBoxProps, GridBoxState> {
+class GridBox extends React.Component<GridBoxProps, GridBoxState> {
     render() {
-        const { dropKey, dropArray, gridSize } = this.props;
+        const { gridKey, items, gridSize, visible } = this.props;
         return (
-            <Droppable droppableId={dropKey} key={dropKey}>
+            <Droppable droppableId={gridKey} key={gridKey}>
                 {(provided, snapshot) => (
                     <div
                         ref={provided.innerRef}
@@ -29,15 +31,17 @@ class GridBox extends React.PureComponent<GridBoxProps, GridBoxState> {
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
-                            zIndex: 1
+                            zIndex: 1,
+                            ...(!visible ? { background: "#000", opacity: 0.9 } : {})
                         }}
                     >
-                        {dropArray &&
-                            dropArray.length > 0 &&
-                            dropArray.map((token: any, index: number) => (
+                        {visible &&
+                            items &&
+                            items.length > 0 &&
+                            items.map((token: any, index: number) => (
                                 <CharToken
                                     token={token}
-                                    tokenSize={gridSize / dropArray.length}
+                                    tokenSize={gridSize / items.length}
                                     tokenId={token.tokenID}
                                     tokenIndex={index}
                                 />
@@ -49,9 +53,32 @@ class GridBox extends React.PureComponent<GridBoxProps, GridBoxState> {
         );
     }
 }
+const getStateForGridBox = createSelector(
+    (state: any, props: any) => {
+        if (state.grid[props.mapKey]) {
+            const map = state.grid[props.mapKey];
+            if (map) {
+                return state.grid[props.mapKey][props.gridKey];
+            }
+        }
 
-const mapStateToProps = (state: any) => {
-    return null;
+        return {
+            items: [],
+            visible: false
+        };
+    },
+    (gridObject: any) => {
+        return {
+            ...gridObject
+        };
+    }
+);
+
+const mapStateToProps = (state: any, props: any) => {
+    return {
+        ...props,
+        ...getStateForGridBox(state, props)
+    };
 };
 
 export default connect(
