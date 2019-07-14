@@ -5,7 +5,7 @@ import { MapSets } from "../../Services/assetLoading/MapSets";
 import Image from "assets/wave.jpg";
 
 import { Droppable } from "react-beautiful-dnd";
-import { CharToken } from "components/CharToken";
+import CharToken from "components/CharToken";
 import { TokenSets } from "Services/assetLoading/TokenSets";
 import { DragDropContext } from "react-beautiful-dnd";
 

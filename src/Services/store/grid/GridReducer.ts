@@ -7,6 +7,9 @@ const GridReducer = (state: any = {}, action: any) => {
         case "Grid/SETUP":
             return { ...state, ...reduceInstantiateGrid(state, action.map) };
         case "Grid/UPDATE_GRID_ITEMS":
+            return { ...state, ...reduceUpdateGridItems(state, action.mapKey, action.gridRef, action.items) };
+        case "Grid/TOGGLE_VISIBILITY":
+            return { ...state, ...reduceToggleGridVisibility(state, action.mapKey, action.gridRef) };
 
         case "Grid/MOVE_GRID_ITEMS":
             return reduceMoveGridItems(state, action.mapKey, action.source, action.destination);
@@ -20,10 +23,17 @@ const GridReducer = (state: any = {}, action: any) => {
 
 export default GridReducer;
 
+const reduceToggleGridVisibility = (state: any, mapKey: string, gridRef: string) => {
+    const current = { ...state[mapKey][gridRef] };
+    return {
+        ...state,
+        [mapKey]: { ...state[mapKey], [gridRef]: { ...current, visible: !current.visible } }
+    };
+};
 const reduceInstantiateGrid = (state: any, mapKey: string) => {
     const existingGrid = state[mapKey];
     if (existingGrid) {
-        return state.grid;
+        return state;
     }
 
     const { rows, columns, gridCustom } = MapSets[mapKey];
@@ -85,14 +95,14 @@ const reduceMoveGridItems = (state: any, mapKey: string, source: any, destinatio
         }
     };
 };
-const reduceUpdateGridItems = (state: any, mapKey: string, gridRef: string, newItem: any[]) => {
+const reduceUpdateGridItems = (state: any, mapKey: string, gridRef: string, newItem: any[] | any) => {
     return {
         ...state,
         [mapKey]: {
             ...state[mapKey],
             [gridRef]: {
                 ...state[mapKey][gridRef],
-                items: newItem
+                items: state[mapKey][gridRef].items.concat(newItem)
             }
         }
     };

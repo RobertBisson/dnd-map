@@ -1,6 +1,6 @@
 import React from "react";
 import { Droppable } from "react-beautiful-dnd";
-import { CharToken } from "./CharToken";
+import CharToken from "./CharToken";
 import { throttle } from "lodash";
 
 interface MenuProps {}

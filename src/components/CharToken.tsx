@@ -1,5 +1,6 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
+import { connect } from "react-redux";
 
 const uuid = require("uuid/v1");
 interface TokenProps {
@@ -7,12 +8,14 @@ interface TokenProps {
     tokenId: string;
     tokenIndex: number;
     tokenSize: number;
+    kill: (tokenId, tokenIndex) => void;
 }
 interface TokenState {
     token: any;
+    showContextMenu: boolean;
 }
 
-export class CharToken extends React.PureComponent<TokenProps, TokenState> {
+export default class CharToken extends React.PureComponent<TokenProps, TokenState> {
     uniqKey: string = "";
     constructor(props: TokenProps) {
         super(props);
@@ -21,7 +24,8 @@ export class CharToken extends React.PureComponent<TokenProps, TokenState> {
             this.loadToken();
         }
         this.state = {
-            token: ""
+            token: "",
+            showContextMenu: false
         };
     }
 
@@ -33,6 +37,26 @@ export class CharToken extends React.PureComponent<TokenProps, TokenState> {
             })
         );
     };
+    handleContext = e => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.setState({ showContextMenu: true });
+        return false;
+    };
+    onMouseOver = () => {
+        this.setState({
+            showContextMenu: true
+        });
+    };
+    onMouseExit = () => {
+        console.log("exit fired");
+        this.setState({
+            showContextMenu: false
+        });
+    };
+    handleKill = () => {
+        this.props.kill(this.props.tokenId, this.props.tokenIndex);
+    };
     render() {
         const { tokenId, tokenIndex } = this.props;
         let { tokenSize } = this.props;
@@ -42,25 +66,50 @@ export class CharToken extends React.PureComponent<TokenProps, TokenState> {
         const { token } = this.state;
 
         return (
-            <Draggable key={this.uniqKey} draggableId={tokenId} index={tokenIndex}>
-                {(provided, snapshot) => (
+            <React.Fragment>
+                <Draggable key={this.uniqKey} draggableId={tokenId} index={tokenIndex}>
+                    {(provided, snapshot) => (
+                        <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={{
+                                width: tokenSize,
+                                height: tokenSize,
+                                padding: tokenSize / 8,
+                                zIndex: 100,
+                                boxSizing: "border-box",
+                                ...provided.draggableProps.style
+                            }}
+                        >
+                            <img
+                                src={this.state.token}
+                                style={{ width: tokenSize - tokenSize / 4, borderRadius: "50%" }}
+                                onContextMenu={this.handleContext}
+                            />
+                        </div>
+                    )}
+                </Draggable>
+                {this.state.showContextMenu && (
                     <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
                         style={{
-                            width: tokenSize,
-                            height: tokenSize,
-                            padding: tokenSize / 12,
-                            zIndex: 100,
-                            boxSizing: "border-box",
-                            ...provided.draggableProps.style
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+
+                            background: "#fcfcfc",
+                            boxShadow: "1px 1px 1px #444",
+                            zIndex: 200
                         }}
+                        onMouseEnter={this.onMouseOver}
+                        onMouseLeave={this.onMouseExit}
                     >
-                        <img src={this.state.token} style={{ width: tokenSize - tokenSize / 6 }} />
+                        <button className="context-action" onClick={this.handleKill}>
+                            Kill
+                        </button>
                     </div>
                 )}
-            </Draggable>
+            </React.Fragment>
         );
     }
 }
