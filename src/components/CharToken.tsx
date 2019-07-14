@@ -51,13 +51,13 @@ export class CharToken extends React.PureComponent<TokenProps, TokenState> {
                         style={{
                             width: tokenSize,
                             height: tokenSize,
-                            padding: tokenSize / 8,
+                            padding: tokenSize / 12,
                             zIndex: 100,
                             boxSizing: "border-box",
                             ...provided.draggableProps.style
                         }}
                     >
-                        <img src={this.state.token} style={{ width: tokenSize - tokenSize / 4 }} />
+                        <img src={this.state.token} style={{ width: tokenSize - tokenSize / 6 }} />
                     </div>
                 )}
             </Draggable>
