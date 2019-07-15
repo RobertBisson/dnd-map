@@ -9,7 +9,7 @@ export const MapSets = {
         gridSize: 59,
         displayName: "Road 1",
         gridCustom: {
-            [getKeyforGridRef(0, 0)]: { items: [{ ...TokenSets.goblin, tokenID: "goblin-1" }], visible: true }
+            [getKeyforGridRef(0, 0)]: { items: [{ ...TokenSets.monster.goblin, tokenID: "goblin-1" }], visible: true }
         }
     },
     goblinCave: {

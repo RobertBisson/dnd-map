@@ -16,6 +16,8 @@ interface MapScreenProps {
     activeMap: any;
     moveItems: (mapKey: string, source: any, destination: any) => void;
     mapKey: string;
+    toggleMouseSwitchingVisibility: (forceMode?: boolean) => void;
+    visibilityOnMouse: boolean;
 }
 interface MapScreenState {
     mapImage: any;
@@ -39,13 +41,7 @@ class MapScreen extends React.Component<MapScreenProps, MapScreenState> {
             width: window.innerWidth - 100,
             height: window.innerHeight,
             zoomLevel: 1,
-            dropArrays: {
-                "drop.0.0": [
-                    { ...TokenSets.goblin, tokenID: "goblin-1" },
-                    { ...TokenSets.goblin, tokenID: "goblin-2" },
-                    { ...TokenSets.goblin, tokenID: "goblin-3" }
-                ]
-            },
+            dropArrays: {},
             killbox: [],
             characterTray: []
         };
@@ -127,8 +123,8 @@ class MapScreen extends React.Component<MapScreenProps, MapScreenState> {
     }
 
     render() {
-        console.log("render");
         const { mapImage, height } = this.state;
+        const { visibilityOnMouse, toggleMouseSwitchingVisibility } = this.props;
         if (!this.props.activeMap) {
             return null;
         }
@@ -142,6 +138,8 @@ class MapScreen extends React.Component<MapScreenProps, MapScreenState> {
                             position: "relative"
                         }}
                         className={"scroll-container"}
+                        onMouseDown={visibilityOnMouse ? () => toggleMouseSwitchingVisibility() : undefined}
+                        onMouseUp={visibilityOnMouse ? () => toggleMouseSwitchingVisibility(false) : undefined}
                     >
                         <div
                             style={{
@@ -164,7 +162,8 @@ class MapScreen extends React.Component<MapScreenProps, MapScreenState> {
 const mapStateToProps = (state: any) => {
     return {
         activeMap: state.map.activeMap,
-        mapKey: state.map.activeMapKey
+        mapKey: state.map.activeMapKey,
+        visibilityOnMouse: state.map.visibilityOnMouse
     };
 };
 
@@ -175,6 +174,12 @@ const mapDispatchToProps = (dispatch: any) => ({
             mapKey: mapKey,
             source: source,
             destination: destination
+        }),
+
+    toggleMouseSwitchingVisibility: (bool?: boolean) =>
+        dispatch({
+            type: "Map/TOGGLE_VISIBILITY_MODE",
+            forceMode: bool
         })
 });
 

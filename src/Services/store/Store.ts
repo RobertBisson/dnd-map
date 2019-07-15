@@ -7,7 +7,9 @@ import GridReducer from "./grid/GridReducer";
 const mapReducer = (
     state: any = {
         activeMap: null,
-        inMapView: false
+        inMapView: false,
+        visibilityMode: false,
+        visibilityOnMouse: false
     },
     action: any
 ) => {
@@ -19,6 +21,15 @@ const mapReducer = (
                 activeMapKey: action.map,
                 inMapView: true
             };
+        case "Map/TOGGLE_VISIBILITY_MODE":
+            return { ...state, visibilityMode: !state.visibilityMode };
+        case "Map/TOOGGLE_VISIBILITY_ON_MOUSE":
+            let updated = action.forceMode != null ? action.forceMode : !state.visibilityOnMouse;
+            return {
+                ...state,
+                visibilityOnMouse: updated,
+                ...(updated === false ? { visibilityMode: false } : {})
+            };
         case "Map/SWITCH_VIEW":
             return {
                 ...state,
@@ -28,6 +39,7 @@ const mapReducer = (
             return { ...state };
     }
 };
+
 const reducer = combineReducers({
     map: mapReducer,
     grid: persistReducer(

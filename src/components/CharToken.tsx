@@ -9,6 +9,7 @@ interface TokenProps {
     tokenIndex: number;
     tokenSize: number;
     kill: (tokenId, tokenIndex) => void;
+    updateItem: (tokenId, tokenIndex, item) => void;
 }
 interface TokenState {
     token: any;
@@ -31,7 +32,7 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
 
     loadToken = () => {
         const { token } = this.props;
-        import(`../assets/token/${token.tokenFile}`).then((image: any) =>
+        import(`../assets/${token.tokenFile}`).then((image: any) =>
             this.setState({
                 token: image.default
             })
@@ -49,13 +50,22 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
         });
     };
     onMouseExit = () => {
-        console.log("exit fired");
         this.setState({
             showContextMenu: false
         });
     };
     handleKill = () => {
+        this.setState({
+            showContextMenu: false
+        });
         this.props.kill(this.props.tokenId, this.props.tokenIndex);
+    };
+    handleWound = () => {
+        const { token } = this.props;
+        this.setState({
+            showContextMenu: false
+        });
+        this.props.updateItem(this.props.tokenId, this.props.tokenIndex, { ...token, wounded: !token.wounded });
     };
     render() {
         const { tokenId, tokenIndex } = this.props;
@@ -63,7 +73,7 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
         if (!tokenSize) {
             tokenSize = 20;
         }
-        const { token } = this.state;
+        const { wounded } = this.props.token;
 
         return (
             <React.Fragment>
@@ -79,14 +89,16 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
                                 padding: tokenSize / 8,
                                 zIndex: 100,
                                 boxSizing: "border-box",
+                                borderRadius: "50%",
                                 ...provided.draggableProps.style
                             }}
                         >
-                            <img
-                                src={this.state.token}
-                                style={{ width: tokenSize - tokenSize / 4, borderRadius: "50%" }}
-                                onContextMenu={this.handleContext}
-                            />
+                            <div className={`token ${wounded ? "wounded" : ""}`} onContextMenu={this.handleContext}>
+                                <img
+                                    src={this.state.token}
+                                    style={{ width: tokenSize - tokenSize / 4, borderRadius: "50%" }}
+                                />
+                            </div>
                         </div>
                     )}
                 </Draggable>
@@ -94,8 +106,6 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
                     <div
                         style={{
                             position: "absolute",
-                            top: 0,
-                            left: 0,
 
                             background: "#fcfcfc",
                             boxShadow: "1px 1px 1px #444",
@@ -106,6 +116,9 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
                     >
                         <button className="context-action" onClick={this.handleKill}>
                             Kill
+                        </button>
+                        <button className="context-action" onClick={this.handleWound}>
+                            {wounded ? "Heal" : "Wound"}
                         </button>
                     </div>
                 )}

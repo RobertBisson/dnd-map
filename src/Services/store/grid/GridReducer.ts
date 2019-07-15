@@ -8,6 +8,11 @@ const GridReducer = (state: any = {}, action: any) => {
             return { ...state, ...reduceInstantiateGrid(state, action.map) };
         case "Grid/UPDATE_GRID_ITEMS":
             return { ...state, ...reduceUpdateGridItems(state, action.mapKey, action.gridRef, action.items) };
+        case "Grid/UPDATE_GRID_ITEM":
+            return {
+                ...state,
+                ...reduceUpdateGridItem(state, action.mapKey, action.gridRef, action.index, action.item)
+            };
         case "Grid/TOGGLE_VISIBILITY":
             return { ...state, ...reduceToggleGridVisibility(state, action.mapKey, action.gridRef) };
 
@@ -103,6 +108,22 @@ const reduceUpdateGridItems = (state: any, mapKey: string, gridRef: string, newI
             [gridRef]: {
                 ...state[mapKey][gridRef],
                 items: state[mapKey][gridRef].items.concat(newItem)
+            }
+        }
+    };
+};
+
+const reduceUpdateGridItem = (state: any, mapKey: string, gridRef: string, index: number, newItem: any) => {
+    let items = state[mapKey][gridRef].items.concat([]);
+
+    items[index] = newItem;
+    return {
+        ...state,
+        [mapKey]: {
+            ...state[mapKey],
+            [gridRef]: {
+                ...state[mapKey][gridRef],
+                items: items
             }
         }
     };

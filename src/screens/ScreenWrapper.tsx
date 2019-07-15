@@ -8,6 +8,7 @@ interface ScreenProps {
     inMapView: boolean;
     setActiveMap: (mapKey: string) => void;
     setMapView: (bool: boolean) => void;
+    toggleMouseVisibility: () => void;
 }
 interface ScreenState {}
 
@@ -64,6 +65,7 @@ class ScreenWrapper extends React.PureComponent<ScreenProps, ScreenState> {
                     <Menu>
                         {this.renderMapList()}
                         {this.renderMenuButton("back", "Back", () => this.props.setMapView(false))}
+                        {this.renderMenuButton("toggle_vis", "Visibility", () => this.props.toggleMouseVisibility())}
                     </Menu>
                 </div>
             );
@@ -88,6 +90,10 @@ const mapDispatchToProps = (dispatch: any) => {
             dispatch({
                 type: "Map/SWITCH_VIEW",
                 inMapViwe: bool
+            }),
+        toggleMouseVisibility: () =>
+            dispatch({
+                type: "Map/TOOGGLE_VISIBILITY_ON_MOUSE"
             })
     };
 };
