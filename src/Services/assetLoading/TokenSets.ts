@@ -15,6 +15,14 @@ export const TokenSets = {
         youngGreenDragon: {
             tokenFile: `monsterToken/Green Dragon Wyrmling_O72WpHn.png`,
             shortname: "JustInCase"
+        },
+        wolf: {
+            tokenFile: `monsterToken/Wolf_8xXaNbR.png`,
+            shortname: "Wolf"
+        },
+        tarrasque: {
+            tokenFile: `monsterToken/Tarrasque_vZWB5JP.png`,
+            shortname: "Tarrasque"
         }
     },
     player: {
