@@ -6,6 +6,8 @@ const GridReducer = (state: any = {}, action: any) => {
         case "Map/ACTIVE_MAP":
         case "Grid/SETUP":
             return { ...state, ...reduceInstantiateGrid(state, action.map) };
+        case "Grid/SETUP_REFRESH":
+            return { ...state, ...reduceInstantiateGrid(state, action.map, true) };
         case "Grid/UPDATE_GRID_ITEMS":
             return { ...state, ...reduceUpdateGridItems(state, action.mapKey, action.gridRef, action.items) };
         case "Grid/UPDATE_GRID_ITEM":
@@ -35,9 +37,9 @@ const reduceToggleGridVisibility = (state: any, mapKey: string, gridRef: string)
         [mapKey]: { ...state[mapKey], [gridRef]: { ...current, visible: !current.visible } }
     };
 };
-const reduceInstantiateGrid = (state: any, mapKey: string) => {
+const reduceInstantiateGrid = (state: any, mapKey: string, override?: boolean) => {
     const existingGrid = state[mapKey];
-    if (existingGrid) {
+    if (existingGrid && !override) {
         return state;
     }
 

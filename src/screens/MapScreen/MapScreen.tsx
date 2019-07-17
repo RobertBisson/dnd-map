@@ -38,7 +38,7 @@ class MapScreen extends React.Component<MapScreenProps, MapScreenState> {
 
         this.state = {
             mapImage: null,
-            width: window.innerWidth - 100,
+            width: window.innerWidth - 200,
             height: window.innerHeight,
             zoomLevel: 1,
             dropArrays: {},
@@ -123,6 +123,7 @@ class MapScreen extends React.Component<MapScreenProps, MapScreenState> {
     }
 
     render() {
+        console.log(this.props);
         const { mapImage, height } = this.state;
         const { visibilityOnMouse, toggleMouseSwitchingVisibility } = this.props;
         if (!this.props.activeMap) {

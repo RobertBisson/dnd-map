@@ -23,6 +23,8 @@ interface GridBoxProps {
 interface GridBoxState {
     showContextMenu: boolean;
     blockLeaving: boolean;
+    showPlayers: boolean;
+    showMonsters: boolean;
 }
 
 class GridBox extends React.Component<GridBoxProps, GridBoxState> {
@@ -30,7 +32,9 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
         super(props);
         this.state = {
             showContextMenu: false,
-            blockLeaving: false
+            blockLeaving: false,
+            showPlayers: false,
+            showMonsters: false
         };
     }
     handleContext = e => {
@@ -122,7 +126,7 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                             style={{
                                 width: gridSize,
                                 height: gridSize,
-                                border: "1px dashed #88888880",
+                                border: "1px groove rgba(136, 136, 136, 0.5)",
                                 boxSizing: "border-box",
                                 flexDirection: "row",
                                 flexWrap: "wrap",
@@ -156,14 +160,9 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                 </Droppable>
                 {this.state.showContextMenu && (
                     <div
+                        className={"context-wrapper"}
                         style={{
-                            position: "absolute",
-                            top: gridSize / 2,
-                            left: 0,
-
-                            background: "#fcfcfc",
-                            boxShadow: "1px 1px 1px #444",
-                            zIndex: 2
+                            top: gridSize / 2
                         }}
                         onMouseEnter={this.onMouseOver}
                         onMouseLeave={this.onMouseExit}
@@ -173,13 +172,35 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                         </button>
                         <hr />
 
-                        {Object.keys(TokenSets.player).map((tokenName: string, index: number) => {
-                            return this.renderAddTokenButton(TokenSets.player[tokenName], index);
-                        })}
+                        <div
+                            className={"context-action"}
+                            onMouseEnter={() => this.setState({ showPlayers: true })}
+                            onMouseLeave={() => this.setState({ showPlayers: false })}
+                        >
+                            <span>Players ></span>
+                            {this.state.showPlayers && (
+                                <div className={"players-menu"}>
+                                    {Object.keys(TokenSets.player).map((tokenName: string, index: number) => {
+                                        return this.renderAddTokenButton(TokenSets.player[tokenName], index);
+                                    })}
+                                </div>
+                            )}
+                        </div>
                         <hr />
-                        {Object.keys(TokenSets.monster).map((tokenName: string, index: number) => {
-                            return this.renderAddTokenButton(TokenSets.monster[tokenName], index);
-                        })}
+                        <div
+                            className={"context-action"}
+                            onMouseEnter={() => this.setState({ showMonsters: true })}
+                            onMouseLeave={() => this.setState({ showMonsters: false })}
+                        >
+                            <span>Monsters ></span>
+                            {this.state.showMonsters && (
+                                <div className={"players-menu"}>
+                                    {Object.keys(TokenSets.monster).map((tokenName: string, index: number) => {
+                                        return this.renderAddTokenButton(TokenSets.monster[tokenName], index);
+                                    })}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 )}
             </div>

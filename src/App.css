@@ -1,7 +1,9 @@
 .App {
     text-align: center;
 }
-
+body {
+    background: #222;
+}
 .App-logo {
     animation: App-logo-spin infinite 20s linear;
     height: 40vmin;
@@ -31,17 +33,42 @@
         transform: rotate(360deg);
     }
 }
+.context-wrapper {
+    position: absolute;
 
+    left: 0;
+    min-width: 100px;
+    background: #fcfcfc;
+    box-shadow: 1px 1px 1px #444;
+    z-index: 1000;
+    padding-bottom: 12px;
+}
+.context-wrapper * {
+    width: 100%;
+    text-align: left;
+}
 .context-action {
-    font-size: 14px;
+    font-size: 16px;
     background: transparent;
+    padding: 4px 8px;
+
     color: #282c34;
     border: none;
     width: 100%;
-    line-height: 20px;
+    font-weight: 400;
+    line-height: 24px;
+    z-index: 9999;
+}
+.players-menu {
+    position: absolute;
+    left: 100px;
+    background: #fcfcfc;
+    width: fit-content;
+    top: 0;
 }
 .context-action:hover {
-    background: lightblue;
+    background: #666;
+    color: #fcfcfc;
 }
 * {
     user-select: none;

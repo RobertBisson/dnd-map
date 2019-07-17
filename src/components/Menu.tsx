@@ -43,10 +43,9 @@ export class Menu extends React.Component<MenuProps, MenuState> {
         return (
             <div
                 style={{
-                    width: 100,
-                    maxWidth: 100,
+                    width: 120,
+                    maxWidth: 120,
                     overflow: "hidden",
-                    height: 200,
 
                     boxSizing: "border-box",
                     flexDirection: "row",

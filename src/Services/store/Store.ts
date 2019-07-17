@@ -8,6 +8,7 @@ const mapReducer = (
     state: any = {
         activeMap: null,
         inMapView: false,
+        activeMapKey: "",
         visibilityMode: false,
         visibilityOnMouse: false
     },
