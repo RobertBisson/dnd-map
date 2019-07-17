@@ -4,6 +4,22 @@ import { TokenSets } from "./TokenSets";
 import { each } from "lodash";
 
 export const MapSetsBase = {
+    areaMap: {
+        mapFile: "neverwinterArea.jpg",
+        columns: 25,
+        rows: 16,
+        gridSize: 86,
+        displayName: "Area",
+        noGrid: true
+    },
+    neverwinter: {
+        mapFile: "neverwinter1.jpg",
+        columns: 16,
+        rows: 11,
+        gridSize: 50,
+        displayName: "Neverwinter",
+        noGrid: true
+    },
     ambush: {
         mapFile: "ambush2.jpg",
         columns: 24,

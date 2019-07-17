@@ -43,11 +43,14 @@ const reduceInstantiateGrid = (state: any, mapKey: string, override?: boolean) =
         return state;
     }
 
-    const { rows, columns, gridCustom } = MapSets[mapKey];
+    const { rows, columns, gridCustom, noGrid } = MapSets[mapKey];
     let newGrid: any = {};
     for (let i = 0; i < rows; i++) {
         for (let colI = 0; colI < columns; colI++) {
             let gridKey = getKeyforGridRef(i, colI);
+            if (noGrid) {
+                newGrid.noGrid = true;
+            }
             if (gridCustom && gridCustom[gridKey]) {
                 newGrid[gridKey] = {
                     items: gridCustom[gridKey].items ? gridCustom[gridKey].items : [],

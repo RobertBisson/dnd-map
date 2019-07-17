@@ -123,9 +123,8 @@ class MapScreen extends React.Component<MapScreenProps, MapScreenState> {
     }
 
     render() {
-        console.log(this.props);
         const { mapImage, height } = this.state;
-        const { visibilityOnMouse, toggleMouseSwitchingVisibility } = this.props;
+        const { visibilityOnMouse, toggleMouseSwitchingVisibility, activeMap } = this.props;
         if (!this.props.activeMap) {
             return null;
         }
@@ -150,6 +149,7 @@ class MapScreen extends React.Component<MapScreenProps, MapScreenState> {
                                 backgroundPosition: "center",
                                 backgroundSize: "contain"
                             }}
+                            className={`map-screen ${activeMap && activeMap.noGrid ? "no-grid" : ""}`}
                         >
                             {this.renderDroppableGrid()}
                         </div>

@@ -13,6 +13,7 @@ interface GridBoxProps {
     items: any[];
     gridSize: number;
     visible: boolean;
+    noGrid?: boolean;
     toggleVisibility: (mapKey: string, gridRef: string) => void;
     addItem: (mapKey: string, gridRef: string, item: any) => void;
     kill: (mapKey: string, gridRef: string, index: number) => void;
@@ -113,7 +114,8 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
         );
     };
     render() {
-        const { gridKey, items, gridSize, visible } = this.props;
+        const { gridKey, items, gridSize, visible, noGrid } = this.props;
+        console.log(this.props);
         return (
             <div
                 style={{ position: "relative" }}
@@ -126,7 +128,8 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                             style={{
                                 width: gridSize,
                                 height: gridSize,
-                                border: "1px groove rgba(136, 136, 136, 0.5)",
+                                border:
+                                    noGrid === true ? "1px solid transparent" : "1px groove rgba(136, 136, 136, 0.5)",
                                 boxSizing: "border-box",
                                 flexDirection: "row",
                                 flexWrap: "wrap",
