@@ -30,6 +30,7 @@ interface GridBoxState {
 }
 
 class GridBox extends React.Component<GridBoxProps, GridBoxState> {
+    timeout: any = null;
     constructor(props: GridBoxProps) {
         super(props);
         this.state = {
@@ -52,16 +53,16 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
         }
     };
     onMouseOver = () => {
-        this.setState({
-            showContextMenu: true,
-            blockLeaving: true
-        });
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
     };
     onMouseExit = () => {
-        this.setState({
-            showContextMenu: false,
-            blockLeaving: false
-        });
+        this.timeout = setTimeout(() => {
+            this.setState({
+                showContextMenu: false
+            });
+        }, 500);
     };
     handleVisibilityToggle = () => {
         const { toggleVisibility, mapKey, gridKey } = this.props;
@@ -129,6 +130,7 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                 style={{ position: "relative" }}
                 onMouseOver={this.props.visibilityMode ? this.handleVisibilityToggle : undefined}
                 onMouseDown={this.handleClick}
+                onMouseLeave={this.onMouseExit}
             >
                 <Droppable droppableId={gridKey} key={gridKey}>
                     {(provided, snapshot) => (
@@ -178,7 +180,6 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                             top: gridSize / 2
                         }}
                         onMouseEnter={this.onMouseOver}
-                        onMouseLeave={this.onMouseExit}
                     >
                         <button className="context-action" onClick={this.handleVisibilityToggle}>
                             Visible
