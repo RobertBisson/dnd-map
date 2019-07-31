@@ -18,6 +18,7 @@ interface TokenState {
 
 export default class CharToken extends React.PureComponent<TokenProps, TokenState> {
     uniqKey: string = "";
+    timeout: any = null;
     constructor(props: TokenProps) {
         super(props);
         this.uniqKey = uuid();
@@ -45,14 +46,17 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
         return false;
     };
     onMouseOver = () => {
-        this.setState({
-            showContextMenu: true
-        });
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+            this.timeout = null;
+        }
     };
     onMouseExit = () => {
-        this.setState({
-            showContextMenu: false
-        });
+        this.timeout = setTimeout(() => {
+            this.setState({
+                showContextMenu: false
+            });
+        }, 500);
     };
     handleKill = () => {
         this.setState({
