@@ -77,7 +77,9 @@ body {
     position: relative;
     height: 100%;
 }
-
+.token img {
+    box-shadow: rgba(34, 34, 34, 0.445) 2px 3px 3px;
+}
 .token.wounded:before {
     content: "";
     display: block;
@@ -96,4 +98,14 @@ body {
 }
 .map-screen.no-grid .drop-row > div > div {
     border: 1px transparent solid !important;
+}
+
+.color-ident {
+    min-width: 10%;
+    height: 10%;
+    width: 10%;
+    border-radius: 50%;
+    top: 45%;
+    position: absolute;
+    left: 5%;
 }

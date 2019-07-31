@@ -68,7 +68,7 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
         this.props.updateItem(this.props.tokenId, this.props.tokenIndex, { ...token, wounded: !token.wounded });
     };
     render() {
-        const { tokenId, tokenIndex } = this.props;
+        const { tokenId, tokenIndex, token } = this.props;
         let { tokenSize } = this.props;
         if (!tokenSize) {
             tokenSize = 20;
@@ -96,8 +96,17 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
                             <div className={`token ${wounded ? "wounded" : ""}`} onContextMenu={this.handleContext}>
                                 <img
                                     src={this.state.token}
-                                    style={{ width: tokenSize - tokenSize / 4, borderRadius: "50%" }}
+                                    style={{
+                                        width: tokenSize - tokenSize / 4,
+                                        borderRadius: "50%",
+                                        boxSizing: "border-box",
+
+                                        ...(token.addBackground
+                                            ? { backgroundColor: "#fcfcfc", border: "3px solid #ba966d" }
+                                            : {})
+                                    }}
                                 />
+                                <div className={`color-ident`} style={{ backgroundColor: token.color }} />
                             </div>
                         </div>
                     )}

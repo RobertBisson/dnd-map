@@ -26,6 +26,24 @@ export const TokenSets = {
         }
     },
     player: {
+        orcLady: {
+            tokenFile: `playerToken/image74.png`,
+            shortname: "Zune"
+        },
+        helmetGuy: {
+            tokenFile: `playerToken/image138.png`,
+            shortname: "Mort"
+        },
+        dragonBornDude: {
+            tokenFile: `playerToken/image113.png`,
+            shortname: "Alkrazor"
+        },
+        goblor: {
+            tokenFile: `playerToken/goblor.png`,
+            shortname: "Goblor",
+            addBackground: true
+        },
+
         mustacheMan: {
             tokenFile: `playerToken/image37.png`,
             shortname: "MrMustache"
@@ -34,18 +52,12 @@ export const TokenSets = {
             tokenFile: `playerToken/image45.png`,
             shortname: "DirtyPirate"
         },
-        orcLady: {
-            tokenFile: `playerToken/image74.png`,
-            shortname: "OrcLady"
-        },
+
         bustyHalfOrc: {
             tokenFile: `playerToken/image129.png`,
             shortname: "HalfOrcLady"
         },
-        dragonBornDude: {
-            tokenFile: `playerToken/image113.png`,
-            shortname: "DragonBornGuy"
-        },
+
         genericFighter: {
             tokenFile: `playerToken/image167.png`,
             shortname: "GenericFighter"
@@ -54,10 +66,7 @@ export const TokenSets = {
             tokenFile: `playerToken/image161.png`,
             shortname: "DwarfElf"
         },
-        helmetGuy: {
-            tokenFile: `playerToken/image138.png`,
-            shortname: "HelmetGuy"
-        },
+
         wizardyOldGuy: {
             tokenFile: `playerToken/image137.png`,
             shortname: "WizardOG"

@@ -19,6 +19,7 @@ interface GridBoxProps {
     kill: (mapKey: string, gridRef: string, index: number) => void;
     updateItem: (mapKey: string, gridRef: string, index: number, item: any) => void;
     visibilityMode: boolean;
+    visibilityOnMouse: boolean;
 }
 
 interface GridBoxState {
@@ -57,7 +58,6 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
         });
     };
     onMouseExit = () => {
-        console.log("exit fired");
         this.setState({
             showContextMenu: false,
             blockLeaving: false
@@ -97,7 +97,10 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
     handleAddToken = (token: any) => {
         let newCharToken = {
             ...token,
-            tokenID: uuid()
+            tokenID: uuid(),
+            color: "#000000".replace(/0/g, function() {
+                return (~~(Math.random() * 16)).toString(16);
+            })
         };
         this.props.addItem(this.props.mapKey, this.props.gridKey, newCharToken);
     };
@@ -113,13 +116,19 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
             </button>
         );
     };
+    handleClick = (event: any) => {
+        if (this.props.visibilityOnMouse) {
+            this.handleVisibilityToggle();
+        }
+    };
     render() {
         const { gridKey, items, gridSize, visible, noGrid } = this.props;
-        console.log(this.props);
+
         return (
             <div
                 style={{ position: "relative" }}
                 onMouseOver={this.props.visibilityMode ? this.handleVisibilityToggle : undefined}
+                onMouseDown={this.handleClick}
             >
                 <Droppable droppableId={gridKey} key={gridKey}>
                     {(provided, snapshot) => (
@@ -149,6 +158,7 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                                 items.length > 0 &&
                                 items.map((token: any, index: number) => (
                                     <CharToken
+                                        key={token.tokenID}
                                         token={token}
                                         tokenSize={gridSize / items.length}
                                         tokenId={token.tokenID}
@@ -235,7 +245,8 @@ const mapStateToProps = (state: any, props: any) => {
     return {
         ...props,
         ...getStateForGridBox(state, props),
-        visibilityMode: state.map.visibilityMode
+        visibilityMode: state.map.visibilityMode,
+        visibilityOnMouse: state.map.visibilityOnMouse
     };
 };
 const mapDispatchToProps = (dispatch: any) => ({
