@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import MapScreen from "./MapScreen/MapScreen";
-import { MapSets } from "Services/assetLoading/MapSets";
+import { MapGroups, MapGroup } from "Services/assetLoading/MapSets";
+
 import { Menu } from "components/Menu";
 
 interface ScreenProps {
@@ -12,9 +13,17 @@ interface ScreenProps {
     toggleMouseVisibility: () => void;
     forceMapRefresh: (mapKey: string) => void;
 }
-interface ScreenState {}
+interface ScreenState {
+    viewingGroup: string | null;
+}
 
 class ScreenWrapper extends React.PureComponent<ScreenProps, ScreenState> {
+    constructor(props: ScreenProps) {
+        super(props);
+        this.state = {
+            viewingGroup: null
+        };
+    }
     handleMapChange = (mapKey: string) => {
         this.props.setActiveMap(mapKey);
     };
@@ -40,21 +49,59 @@ class ScreenWrapper extends React.PureComponent<ScreenProps, ScreenState> {
     };
 
     renderMenuOption = (mapKey: string, index: number) => {
-        return this.renderMenuButton(`map-${index}-${mapKey}`, MapSets[mapKey].displayName, () =>
-            this.handleMapChange(mapKey)
-        );
+        const { viewingGroup } = this.state;
+        if (viewingGroup) {
+            return this.renderMenuButton(
+                `map-${index}-${mapKey}-${viewingGroup}`,
+                MapGroups[viewingGroup].mapList[mapKey].displayName,
+                () => this.handleMapChange(mapKey)
+            );
+        }
+        return null;
     };
     renderMapList() {
-        const MapSetList = Object.keys(MapSets);
+        const { viewingGroup } = this.state;
+        if (viewingGroup) {
+            const MapSetList = Object.keys(MapGroups[viewingGroup].mapList);
+            return (
+                <div
+                    style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}
+                >
+                    {MapSetList.map(this.renderMenuOption)}
+                </div>
+            );
+        }
+        return null;
+    }
+    renderMapGroup(group: MapGroup, index: number) {
+        return this.renderMenuButton(group.groupKey, group.groupName, () =>
+            this.setState({ viewingGroup: group.groupKey })
+        );
+    }
+
+    clearMapGroup = () => {
+        this.setState({ viewingGroup: null });
+    };
+    renderMapGroups() {
+        const { viewingGroup } = this.state;
+
+        const GroupKeys = Object.keys(MapGroups);
         return (
-            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                {MapSetList.map(this.renderMenuOption)}
-            </div>
+            <React.Fragment>
+                {viewingGroup && this.renderMenuButton("back", "Back", this.clearMapGroup)}
+                {!viewingGroup &&
+                    GroupKeys.map((groupKey: string, index: number) => this.renderMapGroup(MapGroups[groupKey], index))}
+                {viewingGroup && this.renderMapList()}
+            </React.Fragment>
         );
     }
     handleForceMapRefresh = () => {
         const { activeMapKey } = this.props;
         this.props.forceMapRefresh(activeMapKey);
+    };
+    handleHome = () => {
+        this.setState({ viewingGroup: null });
+        this.props.setMapView(false);
     };
     render() {
         const { inMapView } = this.props;
@@ -75,15 +122,14 @@ class ScreenWrapper extends React.PureComponent<ScreenProps, ScreenState> {
                 >
                     <MapScreen />
                     <Menu>
-                        {this.renderMapList()}
-                        {this.renderMenuButton("back", "Back", () => this.props.setMapView(false))}
+                        {this.renderMapGroups()}
+                        {this.renderMenuButton("home", "Home", this.handleHome)}
                         {this.renderMenuButton("refresh", "MapRefresh", this.handleForceMapRefresh)}
-                        {this.renderMenuButton("toggle_vis", "Visibility", () => this.props.toggleMouseVisibility())}
                     </Menu>
                 </div>
             );
         }
-        return this.renderMapList();
+        return this.renderMapGroups();
     }
 }
 

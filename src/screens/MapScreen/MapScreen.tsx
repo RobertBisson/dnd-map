@@ -45,6 +45,7 @@ class MapScreen extends React.Component<MapScreenProps, MapScreenState> {
             killbox: [],
             characterTray: []
         };
+
         this.loadImage();
     }
     componentDidUpdate(prevProps: MapScreenProps) {
@@ -54,11 +55,17 @@ class MapScreen extends React.Component<MapScreenProps, MapScreenState> {
     }
     loadImage = async () => {
         const { activeMap } = this.props;
-        import(`../../assets/${activeMap.mapFile}`).then((image: any) => {
-            this.setState({
-                mapImage: image.default
+        if (!activeMap.animated) {
+            import(`../../assets/${activeMap.mapFile}`).then((image: any) => {
+                this.setState({
+                    mapImage: image.default
+                });
             });
-        });
+        } else {
+            this.setState({
+                mapImage: null
+            });
+        }
     };
 
     handleZoomOut = () => {
@@ -87,7 +94,14 @@ class MapScreen extends React.Component<MapScreenProps, MapScreenState> {
             this.props.moveItems(mapKey, source, destination);
         }
     };
-    componentDidMount() {}
+    componentDidMount() {
+        document.addEventListener("onkeydown", this.handleKeyDown);
+        document.addEventListener("onkeyup", this.handleKeyUp);
+    }
+    componentWillUnmount() {
+        document.removeEventListener("onkeydown", this.handleKeyDown);
+        document.removeEventListener("onkeyup", this.handleKeyUp);
+    }
 
     handleContextmenu = (event: any) => {
         console.log(event);
@@ -122,12 +136,20 @@ class MapScreen extends React.Component<MapScreenProps, MapScreenState> {
         ));
     }
 
+    handleKeyDown = (event: any) => {
+        console.log(event);
+    };
+    handleKeyUp = (event: any) => {
+        console.log(event);
+    };
+
     render() {
         const { mapImage, height } = this.state;
         const { visibilityOnMouse, toggleMouseSwitchingVisibility, activeMap } = this.props;
         if (!this.props.activeMap) {
             return null;
         }
+
         return (
             <React.Fragment>
                 <DragDropContext onDragEnd={this.onDragEnd}>
@@ -147,12 +169,21 @@ class MapScreen extends React.Component<MapScreenProps, MapScreenState> {
                                 flexDirection: "column",
                                 backgroundImage: `url(${mapImage})`,
                                 backgroundPosition: "center",
-                                backgroundSize: "contain"
+                                backgroundSize: "contain",
+                                zIndex: 1
                             }}
                             className={`map-screen ${activeMap && activeMap.noGrid ? "no-grid" : ""}`}
                         >
                             {this.renderDroppableGrid()}
                         </div>
+                        {activeMap.animated && (
+                            <iframe
+                                src={activeMap.mapFile}
+                                width="1920"
+                                height="1080"
+                                style={{ zIndex: 0, position: "absolute", top: 0, right: 0 }}
+                            />
+                        )}
                     </div>
                 </DragDropContext>
             </React.Fragment>
