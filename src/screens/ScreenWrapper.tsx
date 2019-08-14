@@ -116,6 +116,8 @@ class ScreenWrapper extends React.PureComponent<ScreenProps, ScreenState> {
                         alignItems: "center",
                         padding: 50,
                         paddingLeft: 120,
+                        paddingBottom: 200,
+                        boxSizing: "border-box",
                         width: "100%",
                         height: "100%"
                     }}

@@ -6,6 +6,8 @@ import { ContextMenuTrigger, ContextMenu } from "react-contextmenu";
 
 import { createSelector } from "reselect";
 import { TokenSets } from "Services/assetLoading/TokenSets";
+
+import { sample } from "lodash";
 const uuid = require("uuid/v1");
 interface GridBoxProps {
     gridKey: string;
@@ -27,6 +29,7 @@ interface GridBoxState {
     blockLeaving: boolean;
     showPlayers: boolean;
     showMonsters: boolean;
+    showNPCs: boolean;
 }
 
 class GridBox extends React.Component<GridBoxProps, GridBoxState> {
@@ -37,7 +40,8 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
             showContextMenu: false,
             blockLeaving: false,
             showPlayers: false,
-            showMonsters: false
+            showMonsters: false,
+            showNPCs: false
         };
     }
     handleContext = e => {
@@ -103,6 +107,10 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                 return (~~(Math.random() * 16)).toString(16);
             })
         };
+
+        if (token.randomToken) {
+            newCharToken.tokenFile = sample(token.randomToken);
+        }
         this.props.addItem(this.props.mapKey, this.props.gridKey, newCharToken);
     };
 
@@ -223,6 +231,20 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                                 <div className={"players-menu"}>
                                     {Object.keys(TokenSets.monster).map((tokenName: string, index: number) => {
                                         return this.renderAddTokenButton(TokenSets.monster[tokenName], index);
+                                    })}
+                                </div>
+                            )}
+                        </div>
+                        <div
+                            className={"context-action"}
+                            onMouseEnter={() => this.setState({ showNPCs: true })}
+                            onMouseLeave={() => this.setState({ showNPCs: false })}
+                        >
+                            <span>NPCs ></span>
+                            {this.state.showNPCs && (
+                                <div className={"players-menu"}>
+                                    {Object.keys(TokenSets.npc).map((tokenName: string, index: number) => {
+                                        return this.renderAddTokenButton(TokenSets.npc[tokenName], index);
                                     })}
                                 </div>
                             )}
