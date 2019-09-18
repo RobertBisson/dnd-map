@@ -127,18 +127,18 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
     };
     handleClick = (event: any) => {
         const { visible } = this.props;
-        if (event && event.shiftKey && event.buttons === 1 && !event.ctrlKey && visible) {
+        if (event && event.shiftKey && event.buttons === 1 && !event.altKey && visible) {
             this.handleVisibilityToggle();
-        } else if (event && event.shiftKey && event.ctrlKey && event.buttons === 1 && !visible) {
+        } else if (event && event.shiftKey && event.altKey && event.buttons === 1 && !visible) {
             this.handleVisibilityToggle();
         }
     };
 
     handleMouseOver = (event: any) => {
         const { visible } = this.props;
-        if (event && event.shiftKey && event.buttons === 1 && !event.ctrlKey && visible) {
+        if (event && event.shiftKey && event.buttons === 1 && !event.altKey && visible) {
             this.handleVisibilityToggle();
-        } else if (event && event.shiftKey && event.ctrlKey && event.buttons === 1 && !visible) {
+        } else if (event && event.shiftKey && event.altKey && event.buttons === 1 && !visible) {
             this.handleVisibilityToggle();
         }
     };

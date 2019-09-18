@@ -31,6 +31,13 @@ export const TokenSets = {
             ],
             shortname: "Goblin S"
         },
+
+        orc: {
+            tokenFile: `monsterToken/Orc_6gTUCJV.png`,
+
+            shortname: "Orc"
+        },
+
         kobold: {
             tokenFile: `monsterToken/Kobold_u6elUK2.png`,
             shortname: "kobold"
@@ -63,6 +70,27 @@ export const TokenSets = {
                 `monsterToken/wolf/Wolf6.png`
             ],
             shortname: "Wolf"
+        },
+        owlbear: {
+            tokenFile: `monsterToken/Owlbear_p7RG0z1.png`,
+            shortname: "Owlbear"
+        },
+        ghoul: {
+            tokenFile: `monsterToken/Ghoul_iOmCIvm.png`,
+            shortname: "Stirge"
+        },
+        hobgoblin: {
+            tokenFile: `monsterToken/Hobgoblin Warlord_zHyI1cG.png`,
+            shortname: "Stirge"
+        },
+
+        ogre: {
+            tokenFile: `monsterToken/Ogre_iFhtpMS.png`,
+            shortname: "Ogre"
+        },
+        stirge: {
+            tokenFile: `monsterToken/Stirge_skKyJLp.png`,
+            shortname: "Stirge"
         },
         tarrasque: {
             tokenFile: `monsterToken/Tarrasque_vZWB5JP.png`,
