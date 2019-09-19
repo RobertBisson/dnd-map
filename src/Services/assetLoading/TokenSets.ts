@@ -38,6 +38,14 @@ export const TokenSets = {
             shortname: "Orc"
         },
 
+        nothic: {
+            tokenFile: `monsterToken/Nothic_o206aNl.png`,
+            shortname: "Nothic"
+        },
+        skeleton: {
+            tokenFile: `monsterToken/skeleton.png`,
+            shortname: "Skeleton"
+        },
         kobold: {
             tokenFile: `monsterToken/Kobold_u6elUK2.png`,
             shortname: "kobold"
