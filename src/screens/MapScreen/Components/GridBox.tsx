@@ -170,7 +170,7 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                                 overflow: "visible",
                                 alignItems: "center",
                                 zIndex: 1,
-                                ...(!visible ? { background: "#000", opacity: 0.9 } : {})
+                                ...(!visible ? { background: "#000", opacity: 1 } : {})
                             }}
                             className={`${this.state.blockLeaving ? "blocked" : ""}`}
                             onContextMenu={this.handleContext}
