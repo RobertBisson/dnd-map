@@ -153,6 +153,45 @@ export const MapSetsBase = {
                 noGrid: false
             }
         }
+    },
+    act3: {
+        groupKey: "act3",
+        groupName: "Act 3",
+        mapList: {
+            wyvern: {
+                mapFile: "wyvern.jpg",
+                columns: 50,
+                rows: 38,
+                gridSize: 50,
+                displayName: "Wyvern",
+                noGrid: false
+            },
+            thunder: {
+                mapFile: "Thundertree_1.jpg",
+                columns: 60,
+                rows: 41,
+                gridSize: 50,
+                displayName: "Thunder",
+                noGrid: false
+            },
+            oldOwl: {
+                mapFile: "old_owl_1.jpg",
+                columns: 25,
+                rows: 19,
+                gridSize: 50,
+                displayName: "Owl",
+                noGrid: false
+            },
+            cragmaw: {
+                mapFile: "cragmaw_castle.jpg",
+                columns: 50,
+                rows: 50,
+
+                gridSize: 50,
+                displayName: "Crag",
+                noGrid: false
+            }
+        }
     }
 };
 let MapSetScale: any = {};
