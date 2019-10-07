@@ -5,9 +5,10 @@ import CharToken from "components/CharToken";
 import { ContextMenuTrigger, ContextMenu } from "react-contextmenu";
 
 import { createSelector } from "reselect";
-import { TokenSets } from "Services/assetLoading/TokenSets";
+import { TokenSets, TokenBase, Token } from "Services/assetLoading/TokenSets";
 
 import { sample } from "lodash";
+import { rollD } from "Services/util/RollUtil";
 const uuid = require("uuid/v1");
 interface GridBoxProps {
     gridKey: string;
@@ -22,6 +23,10 @@ interface GridBoxProps {
     updateItem: (mapKey: string, gridRef: string, index: number, item: any) => void;
     visibilityMode: boolean;
     visibilityOnMouse: boolean;
+
+    selectItem: (token: Token) => void;
+    deselectItem: () => void;
+    selectedTokenID?: string;
 }
 
 interface GridBoxState {
@@ -76,20 +81,7 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
             blockLeaving: false
         });
     };
-    handleAddGoblin = () => {
-        let goblin = {
-            ...TokenSets.monster.goblin,
-            tokenID: uuid()
-        };
-        this.props.addItem(this.props.mapKey, this.props.gridKey, goblin);
-    };
-    handleAddKobold = () => {
-        let kobold = {
-            ...TokenSets.monster.kobold,
-            tokenID: uuid()
-        };
-        this.props.addItem(this.props.mapKey, this.props.gridKey, kobold);
-    };
+
     handleKillToken = (tokenId: string, tokenIndex: number) => {
         const { kill, mapKey, gridKey } = this.props;
         kill(mapKey, gridKey, tokenIndex);
@@ -99,18 +91,29 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
         updateItem(mapKey, gridKey, tokenIndex, item);
     };
 
-    handleAddToken = (token: any) => {
-        let newCharToken = {
+    handleAddToken = (token: TokenBase) => {
+        let newCharToken: Partial<Token> = {
             ...token,
             tokenID: uuid(),
             color: "#000000".replace(/0/g, function() {
                 return (~~(Math.random() * 16)).toString(16);
-            })
+            }),
+            health: -1,
+            armor: -1
         };
 
         if (token.randomToken) {
-            newCharToken.tokenFile = sample(token.randomToken);
+            newCharToken.tokenFile = sample(token.randomToken) || newCharToken.tokenFile;
         }
+        if (newCharToken.baseHealth) {
+            newCharToken.health = newCharToken.baseHealth();
+        }
+
+        if (newCharToken.baseArmor) {
+            newCharToken.armor = newCharToken.baseArmor();
+        }
+
+        newCharToken.initiative = rollD(20) + newCharToken.initiativeBonus || 0;
         this.props.addItem(this.props.mapKey, this.props.gridKey, newCharToken);
     };
 
@@ -183,10 +186,13 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                                         key={token.tokenID}
                                         token={token}
                                         tokenSize={gridSize / items.length}
-                                        tokenId={token.tokenID}
+                                        tokenID={token.tokenID}
                                         tokenIndex={index}
                                         kill={this.handleKillToken}
                                         updateItem={this.handleUpdateToken}
+                                        onSelect={this.props.selectItem}
+                                        onDeselect={this.props.deselectItem}
+                                        selected={this.props.selectedTokenID === token.tokenID}
                                     />
                                 ))}
                             {provided.placeholder}
@@ -281,7 +287,8 @@ const mapStateToProps = (state: any, props: any) => {
         ...props,
         ...getStateForGridBox(state, props),
         visibilityMode: state.map.visibilityMode,
-        visibilityOnMouse: state.map.visibilityOnMouse
+        visibilityOnMouse: state.map.visibilityOnMouse,
+        selectedTokenID: state.character.activeChar && state.character.activeChar.tokenID
     };
 };
 const mapDispatchToProps = (dispatch: any) => ({
@@ -303,6 +310,15 @@ const mapDispatchToProps = (dispatch: any) => ({
             gridRef: gridRef,
             index: index,
             item: item
+        }),
+    selectItem: (token: Token) =>
+        dispatch({
+            type: "Character/SET_ACTIVE",
+            token: token
+        }),
+    deselectItem: () =>
+        dispatch({
+            type: "Character/RESET"
         })
 });
 

@@ -1,19 +1,24 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { connect } from "react-redux";
+import { Token } from "Services/assetLoading/TokenSets";
 
 const uuid = require("uuid/v1");
 interface TokenProps {
-    token: any;
-    tokenId: string;
+    token: Token;
+    tokenID: string;
     tokenIndex: number;
     tokenSize: number;
-    kill: (tokenId, tokenIndex) => void;
-    updateItem: (tokenId, tokenIndex, item) => void;
+    kill: (tokenID, tokenIndex) => void;
+    updateItem: (tokenID, tokenIndex, item) => void;
+    onSelect: (token) => void;
+    onDeselect: () => void;
+    selected: boolean;
 }
 interface TokenState {
     token: any;
     showContextMenu: boolean;
+    focused: boolean;
 }
 
 export default class CharToken extends React.PureComponent<TokenProps, TokenState> {
@@ -27,7 +32,8 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
         }
         this.state = {
             token: "",
-            showContextMenu: false
+            showContextMenu: false,
+            focused: false
         };
     }
 
@@ -62,17 +68,25 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
         this.setState({
             showContextMenu: false
         });
-        this.props.kill(this.props.tokenId, this.props.tokenIndex);
+        this.props.kill(this.props.tokenID, this.props.tokenIndex);
     };
     handleWound = () => {
         const { token } = this.props;
         this.setState({
             showContextMenu: false
         });
-        this.props.updateItem(this.props.tokenId, this.props.tokenIndex, { ...token, wounded: !token.wounded });
+        this.props.updateItem(this.props.tokenID, this.props.tokenIndex, { ...token, wounded: !token.wounded });
+    };
+
+    handleClick = () => {
+        if (this.props.selected) {
+            this.props.onDeselect();
+        } else {
+            this.props.onSelect(this.props.token);
+        }
     };
     render() {
-        const { tokenId, tokenIndex, token } = this.props;
+        const { tokenID, tokenIndex, token, selected } = this.props;
         let { tokenSize } = this.props;
         if (!tokenSize) {
             tokenSize = 20;
@@ -81,12 +95,13 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
 
         return (
             <React.Fragment>
-                <Draggable key={this.uniqKey} draggableId={tokenId} index={tokenIndex}>
+                <Draggable key={this.uniqKey} draggableId={tokenID} index={tokenIndex}>
                     {(provided, snapshot) => (
                         <div
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
+                            tabIndex={-1}
                             style={{
                                 width: tokenSize,
                                 height: tokenSize,
@@ -97,7 +112,11 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
                                 ...provided.draggableProps.style
                             }}
                         >
-                            <div className={`token ${wounded ? "wounded" : ""}`} onContextMenu={this.handleContext}>
+                            <div
+                                className={`token ${wounded ? "wounded" : ""} ${selected ? "selected" : ""} `}
+                                onContextMenu={this.handleContext}
+                                onClick={this.handleClick}
+                            >
                                 <img
                                     src={this.state.token}
                                     style={{

@@ -4,6 +4,7 @@ import MapScreen from "./MapScreen/MapScreen";
 import { MapGroups, MapGroup } from "Services/assetLoading/MapSets";
 
 import { Menu } from "components/Menu";
+import { Token } from "Services/assetLoading/TokenSets";
 
 interface ScreenProps {
     inMapView: boolean;
@@ -12,6 +13,7 @@ interface ScreenProps {
     setMapView: (bool: boolean) => void;
     toggleMouseVisibility: () => void;
     forceMapRefresh: (mapKey: string) => void;
+    activeCharToken?: Token;
 }
 interface ScreenState {
     viewingGroup: string | null;
@@ -104,7 +106,7 @@ class ScreenWrapper extends React.PureComponent<ScreenProps, ScreenState> {
         this.props.setMapView(false);
     };
     render() {
-        const { inMapView } = this.props;
+        const { inMapView, activeCharToken } = this.props;
 
         if (inMapView) {
             return (
@@ -128,6 +130,35 @@ class ScreenWrapper extends React.PureComponent<ScreenProps, ScreenState> {
                         {this.renderMenuButton("home", "Home", this.handleHome)}
                         {this.renderMenuButton("refresh", "MapRefresh", this.handleForceMapRefresh)}
                     </Menu>
+
+                    {activeCharToken && (
+                        <Menu align={"right"} width={210}>
+                            <div className={"character-sheet"}>
+                                <div className={"sheet-title"}>
+                                    <h3>{activeCharToken.shortname}</h3>
+                                </div>
+                                {activeCharToken.health > 0 && (
+                                    <div className={"sheet-row"}>
+                                        <h4>
+                                            HP: <span>{activeCharToken.health}</span>
+                                        </h4>
+                                    </div>
+                                )}
+                                {activeCharToken.armor > 0 && (
+                                    <div>
+                                        <h4>
+                                            AC: <span>{activeCharToken.armor}</span>
+                                        </h4>
+                                    </div>
+                                )}
+                                <div>
+                                    <h4>
+                                        I: <span>{activeCharToken.initiative}</span>
+                                    </h4>
+                                </div>
+                            </div>
+                        </Menu>
+                    )}
                 </div>
             );
         }
@@ -138,7 +169,8 @@ class ScreenWrapper extends React.PureComponent<ScreenProps, ScreenState> {
 const mapStateToProps = (state: any) => {
     return {
         inMapView: state.map.inMapView,
-        activeMapKey: state.map.activeMapKey
+        activeMapKey: state.map.activeMapKey,
+        activeCharToken: state.character.activeChar
     };
 };
 const mapDispatchToProps = (dispatch: any) => {

@@ -7,6 +7,7 @@ import { KEY_PREFIX } from "redux-persist/es/constants";
 
 import { isEqual } from "lodash";
 import GridReducer from "./grid/GridReducer";
+import { CharacterReducer } from "./character/CharacterReducer";
 const mapReducer = (
     state: any = {
         activeMap: null,
@@ -34,6 +35,7 @@ const mapReducer = (
                 visibilityOnMouse: updated,
                 ...(updated === false ? { visibilityMode: false } : {})
             };
+
         case "Map/SWITCH_VIEW":
             return {
                 ...state,
@@ -52,7 +54,8 @@ const reducer = combineReducers({
             storage
         },
         GridReducer
-    )
+    ),
+    character: CharacterReducer
 });
 
 const Store = createStore(

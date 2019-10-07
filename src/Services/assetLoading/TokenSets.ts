@@ -1,3 +1,23 @@
+import { rollD, rollBinary, rollBinaryRare, rollXD, rollBinaryCommon } from "Services/util/RollUtil";
+
+export interface TokenBase {
+    tokenFile: string;
+    randomToken: string[];
+    shortname: string;
+    baseHealth: () => number;
+    baseArmor: () => number;
+    initiativeBonus?: number;
+    addBackground?: boolean;
+}
+export interface Token extends TokenBase {
+    tokenID: string;
+    color: string;
+    initiative?: number;
+    health: number;
+    armor: number;
+    wounded?: boolean;
+}
+
 export const TokenSets = {
     monster: {
         goblin: {
@@ -13,12 +33,18 @@ export const TokenSets = {
                 `monsterToken/goblin/Goblin16.png`,
                 `monsterToken/goblin/Goblin19.png`
             ],
+            baseHealth: () => rollXD(2, 6),
+            baseArmor: () => 13 + (rollBinary() ? 2 : 0),
+            initiativeBonus: 2,
             shortname: "Goblin"
         },
         goblin_archer: {
             tokenFile: `monsterToken/goblin/Goblin_archer.png`,
             randomToken: [`monsterToken/goblin/Goblin_archer.png`, `monsterToken/goblin/Goblin_archer2.png`],
-            shortname: "Goblin A"
+            shortname: "Goblin A",
+            baseHealth: () => rollXD(2, 6),
+            baseArmor: () => 13,
+            initiativeBonus: 2
         },
         goblin_special: {
             tokenFile: `monsterToken/goblin/special/Goblin1.png`,
@@ -29,26 +55,43 @@ export const TokenSets = {
                 `monsterToken/goblin/special/Goblin17.png`,
                 `monsterToken/goblin/special/Goblin18.png`
             ],
-            shortname: "Goblin S"
+            shortname: "Goblin S",
+            baseHealth: () => rollXD(2, 6) + 2,
+            baseArmor: () => 13 + (rollBinary() ? 2 : 0),
+            initiativeBonus: 2
         },
 
         orc: {
             tokenFile: `monsterToken/Orc_6gTUCJV.png`,
+            shortname: "Orc",
 
-            shortname: "Orc"
+            baseHealth: () => rollXD(2, 8) + 2,
+            baseArmor: () => 13 + (rollBinaryRare() ? 2 : 0),
+            initiativeBonus: 1
         },
 
         nothic: {
             tokenFile: `monsterToken/Nothic_o206aNl.png`,
-            shortname: "Nothic"
+            shortname: "Nothic",
+
+            baseHealth: () => rollXD(6, 8) + 18,
+            baseArmor: () => 15,
+            initiativeBonus: 3
         },
         skeleton: {
             tokenFile: `monsterToken/skeleton.png`,
-            shortname: "Skeleton"
+            shortname: "Skeleton",
+
+            baseHealth: () => rollXD(2, 8) + 4,
+            baseArmor: () => 13,
+            initiativeBonus: 2
         },
         kobold: {
             tokenFile: `monsterToken/Kobold_u6elUK2.png`,
-            shortname: "kobold"
+            shortname: "kobold",
+            baseHealth: () => Math.max(rollXD(2, 6) - 2, 4),
+            baseArmor: () => 12,
+            initiativeBonus: 2
         },
         bugbear: {
             tokenFile: `monsterToken/bugbear/Bugbear Chief_TC1iFM8.png`,
@@ -60,11 +103,17 @@ export const TokenSets = {
                 `monsterToken/bugbear/Bugbear3.png`,
                 `monsterToken/bugbear/Bugbear4.png`,
                 `monsterToken/bugbear/Bugbear5.png`
-            ]
+            ],
+            baseHealth: () => Math.max(rollXD(5, 8) + 5, 20),
+            baseArmor: () => 14 + (rollBinaryCommon() ? 2 : 0),
+            initiativeBonus: 2
         },
         youngGreenDragon: {
             tokenFile: `monsterToken/Green Dragon Wyrmling_O72WpHn.png`,
-            shortname: "JustInCase"
+            shortname: "JustInCase",
+            baseHealth: () => Math.max(rollXD(16, 10) + 48, 140),
+            baseArmor: () => 18,
+            initiativeBonus: 1
         },
         wolf: {
             tokenFile: `monsterToken/wolf/Wolf_8xXaNbR.png`,
@@ -77,56 +126,93 @@ export const TokenSets = {
                 `monsterToken/wolf/Wolf5.png`,
                 `monsterToken/wolf/Wolf6.png`
             ],
-            shortname: "Wolf"
+            shortname: "Wolf",
+            baseHealth: () => Math.max(rollXD(2, 8) + 2, 8),
+            baseArmor: () => 13,
+            initiativeBonus: 2
         },
         owlbear: {
             tokenFile: `monsterToken/Owlbear_p7RG0z1.png`,
-            shortname: "Owlbear"
+            shortname: "Owlbear",
+            baseHealth: () => Math.max(rollXD(7, 10) + 21, 40),
+            baseArmor: () => 13,
+            initiativeBonus: 1
         },
         ghoul: {
             tokenFile: `monsterToken/Ghoul_iOmCIvm.png`,
-            shortname: "Stirge"
+            shortname: "Ghoul",
+
+            baseHealth: () => Math.max(rollXD(5, 8), 16),
+            baseArmor: () => 12,
+            initiativeBonus: 2
         },
         hobgoblin: {
             tokenFile: `monsterToken/Hobgoblin Warlord_zHyI1cG.png`,
-            shortname: "Stirge"
+            shortname: "Hobgoblin",
+            baseHealth: () => rollXD(2, 8) + 2,
+            baseArmor: () => 16 + (rollBinaryCommon() ? 2 : 0),
+            initiativeBonus: 1
         },
 
         ogre: {
             tokenFile: `monsterToken/Ogre_iFhtpMS.png`,
-            shortname: "Ogre"
+            shortname: "Ogre",
+            baseHealth: () => Math.max(rollXD(7, 10) + 21, 40),
+            baseArmor: () => 11,
+            initiativeBonus: -1
         },
         stirge: {
             tokenFile: `monsterToken/Stirge_skKyJLp.png`,
-            shortname: "Stirge"
+            shortname: "Stirge",
+            baseHealth: () => Math.max(rollXD(1, 4), 1),
+            baseArmor: () => 14,
+            initiativeBonus: 3
         },
         tarrasque: {
             tokenFile: `monsterToken/Tarrasque_vZWB5JP.png`,
-            shortname: "Tarrasque"
+            shortname: "Tarrasque",
+            baseHealth: () => Math.max(rollXD(33, 20) + 330, 600),
+            baseArmor: () => 25,
+            initiativeBonus: 0
         }
     },
     player: {
         orcLady: {
             tokenFile: `playerToken/image74.png`,
-            shortname: "Zune"
+            shortname: "Zune",
+            baseHealth: () => 35,
+            baseArmor: () => 15,
+            initiativeBonus: 2
         },
         helmetGuy: {
             tokenFile: `playerToken/image138.png`,
-            shortname: "Mort"
+            shortname: "Mort",
+            baseHealth: () => 28,
+            baseArmor: () => 19,
+            initiativeBonus: 2
         },
         dragonBornDude: {
             tokenFile: `playerToken/image113.png`,
-            shortname: "Alkrazor"
+            shortname: "Alkrazor",
+            baseHealth: () => 23,
+            baseArmor: () => 16,
+            initiativeBonus: 1
         },
         goblor: {
             tokenFile: `playerToken/goblor.png`,
             shortname: "Goblor",
-            addBackground: true
+            addBackground: true,
+            baseHealth: () => 21,
+            baseArmor: () => 14,
+            initiativeBonus: 3
         },
 
         mustacheMan: {
             tokenFile: `playerToken/image37.png`,
-            shortname: "Tove"
+            shortname: "Tove",
+            baseHealth: () => 24,
+            baseArmor: () => 11,
+            initiativeBonus: -1
         }
     },
     npc: {
@@ -173,7 +259,10 @@ export const TokenSets = {
                 `npcToken/bandit/Thug02.png`,
                 `npcToken/bandit/Thug03.png`,
                 `npcToken/bandit/Thug04.png`
-            ]
+            ],
+            baseHealth: () => Math.max(rollXD(2, 8) + 2, 8),
+            baseArmor: () => 12,
+            initiativeBonus: 1
         },
         barmaids: {
             tokenFile: `npcToken/shops/barmaid.png`,
