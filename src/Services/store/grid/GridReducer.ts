@@ -106,7 +106,6 @@ const reduceMoveGridItems = (state: any, mapKey: string, source: any, destinatio
     };
 };
 const reduceUpdateGridItems = (state: any, mapKey: string, gridRef: string, newItem: any[] | any) => {
-    console.log(newItem);
     return {
         ...state,
         [mapKey]: {
