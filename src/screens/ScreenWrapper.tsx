@@ -17,13 +17,15 @@ interface ScreenProps {
 }
 interface ScreenState {
     viewingGroup: string | null;
+    dmScreen: boolean;
 }
 
 class ScreenWrapper extends React.PureComponent<ScreenProps, ScreenState> {
     constructor(props: ScreenProps) {
         super(props);
         this.state = {
-            viewingGroup: null
+            viewingGroup: null,
+            dmScreen: false
         };
     }
     handleMapChange = (mapKey: string) => {
@@ -107,7 +109,7 @@ class ScreenWrapper extends React.PureComponent<ScreenProps, ScreenState> {
     };
     render() {
         const { inMapView, activeCharToken } = this.props;
-
+        const { dmScreen } = this.state;
         if (inMapView) {
             return (
                 <div
@@ -129,34 +131,44 @@ class ScreenWrapper extends React.PureComponent<ScreenProps, ScreenState> {
                         {this.renderMapGroups()}
                         {this.renderMenuButton("home", "Home", this.handleHome)}
                         {this.renderMenuButton("refresh", "MapRefresh", this.handleForceMapRefresh)}
+                        <button
+                            style={{ marginTop: 8 }}
+                            onClick={() => this.setState({ dmScreen: !this.state.dmScreen })}
+                        >
+                            {dmScreen ? "DM Off" : "DM On"}
+                        </button>
                     </Menu>
 
-                    {activeCharToken && (
+                    {dmScreen && (
                         <Menu align={"right"} width={210}>
-                            <div className={"character-sheet"}>
-                                <div className={"sheet-title"}>
-                                    <h3>{activeCharToken.shortname}</h3>
-                                </div>
-                                {activeCharToken.health > 0 && (
-                                    <div className={"sheet-row"}>
-                                        <h4>
-                                            HP: <span>{activeCharToken.health}</span>
-                                        </h4>
-                                    </div>
-                                )}
-                                {activeCharToken.armor > 0 && (
-                                    <div>
-                                        <h4>
-                                            AC: <span>{activeCharToken.armor}</span>
-                                        </h4>
-                                    </div>
-                                )}
-                                <div>
-                                    <h4>
-                                        I: <span>{activeCharToken.initiative}</span>
-                                    </h4>
-                                </div>
-                            </div>
+                            {activeCharToken && (
+                                <React.Fragment>
+                                    <div className={"character-sheet"}>
+                                        <div className={"sheet-title"}>
+                                            <h3>{activeCharToken.shortname}</h3>
+                                        </div>
+                                        {activeCharToken.health > 0 && (
+                                            <div className={"sheet-row"}>
+                                                <h4>
+                                                    HP: <span>{activeCharToken.health}</span>
+                                                </h4>
+                                            </div>
+                                        )}
+                                        {activeCharToken.armor > 0 && (
+                                            <div>
+                                                <h4>
+                                                    AC: <span>{activeCharToken.armor}</span>
+                                                </h4>
+                                            </div>
+                                        )}
+                                        <div>
+                                            <h4>
+                                                I: <span>{activeCharToken.initiative}</span>
+                                            </h4>
+                                        </div>
+                                    </div>{" "}
+                                </React.Fragment>
+                            )}
                         </Menu>
                     )}
                 </div>
