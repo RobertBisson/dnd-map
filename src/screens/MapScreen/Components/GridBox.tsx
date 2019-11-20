@@ -33,8 +33,10 @@ interface GridBoxState {
     showContextMenu: boolean;
     blockLeaving: boolean;
     showPlayers: boolean;
-    showMonsters: boolean;
+    showMonsterHumanoid: boolean;
     showNPCs: boolean;
+    showMonsterUndead: boolean;
+    showMonstersOther: boolean;
 }
 
 class GridBox extends React.Component<GridBoxProps, GridBoxState> {
@@ -45,7 +47,9 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
             showContextMenu: false,
             blockLeaving: false,
             showPlayers: false,
-            showMonsters: false,
+            showMonsterHumanoid: false,
+            showMonsterUndead: false,
+            showMonstersOther: false,
             showNPCs: false
         };
     }
@@ -229,14 +233,42 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                         <hr />
                         <div
                             className={"context-action"}
-                            onMouseEnter={() => this.setState({ showMonsters: true })}
-                            onMouseLeave={() => this.setState({ showMonsters: false })}
+                            onMouseEnter={() => this.setState({ showMonsterHumanoid: true })}
+                            onMouseLeave={() => this.setState({ showMonsterHumanoid: false })}
                         >
-                            <span>Monsters ></span>
-                            {this.state.showMonsters && (
+                            <span>Humanoid ></span>
+                            {this.state.showMonsterHumanoid && (
                                 <div className={"players-menu"}>
                                     {Object.keys(TokenSets.monster).map((tokenName: string, index: number) => {
                                         return this.renderAddTokenButton(TokenSets.monster[tokenName], index);
+                                    })}
+                                </div>
+                            )}
+                        </div>
+                        <div
+                            className={"context-action"}
+                            onMouseEnter={() => this.setState({ showMonsterUndead: true })}
+                            onMouseLeave={() => this.setState({ showMonsterUndead: false })}
+                        >
+                            <span>Undead ></span>
+                            {this.state.showMonsterUndead && (
+                                <div className={"players-menu"}>
+                                    {Object.keys(TokenSets.monsterUndead).map((tokenName: string, index: number) => {
+                                        return this.renderAddTokenButton(TokenSets.monsterUndead[tokenName], index);
+                                    })}
+                                </div>
+                            )}
+                        </div>
+                        <div
+                            className={"context-action"}
+                            onMouseEnter={() => this.setState({ showMonstersOther: true })}
+                            onMouseLeave={() => this.setState({ showMonstersOther: false })}
+                        >
+                            <span>Monster ></span>
+                            {this.state.showMonstersOther && (
+                                <div className={"players-menu"}>
+                                    {Object.keys(TokenSets.monsterOther).map((tokenName: string, index: number) => {
+                                        return this.renderAddTokenButton(TokenSets.monsterOther[tokenName], index);
                                     })}
                                 </div>
                             )}
@@ -322,7 +354,4 @@ const mapDispatchToProps = (dispatch: any) => ({
         })
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(GridBox);
+export default connect(mapStateToProps, mapDispatchToProps)(GridBox);

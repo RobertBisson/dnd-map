@@ -121,6 +121,7 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
                                     src={this.state.token}
                                     style={{
                                         width: tokenSize - tokenSize / 4,
+                                        height: tokenSize - tokenSize / 4,
                                         borderRadius: "50%",
                                         boxSizing: "border-box",
 
