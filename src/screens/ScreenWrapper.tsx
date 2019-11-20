@@ -13,6 +13,7 @@ interface ScreenProps {
     setMapView: (bool: boolean) => void;
     toggleMouseVisibility: () => void;
     forceMapRefresh: (mapKey: string) => void;
+    tokenList: any[];
     activeCharToken?: Token;
 }
 interface ScreenState {
@@ -182,7 +183,12 @@ const mapStateToProps = (state: any) => {
     return {
         inMapView: state.map.inMapView,
         activeMapKey: state.map.activeMapKey,
-        activeCharToken: state.character.activeChar
+        activeCharToken: state.character.activeChar,
+        tokenList: state.map.activeMapKey
+            ? state.grid[state.map.activeMapKey]
+                ? state.grid[state.map.activeMapKey].activeTokens
+                : []
+            : []
     };
 };
 const mapDispatchToProps = (dispatch: any) => {

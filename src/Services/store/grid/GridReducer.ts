@@ -1,6 +1,8 @@
 import { MapSets } from "Services/assetLoading/MapSets";
 import { getKeyforGridRef } from "Services/util/GridUtil";
 
+import { sortBy, uniqBy } from "lodash";
+
 const GridReducer = (state: any = {}, action: any) => {
     switch (action.type) {
         case "Map/ACTIVE_MAP":
@@ -30,6 +32,10 @@ const GridReducer = (state: any = {}, action: any) => {
 
 export default GridReducer;
 
+const reduceAddTokensToList = (activeMapTokens: any[], tokens: any) => {
+    let list = uniqBy(activeMapTokens ? activeMapTokens.concat(tokens) : [].concat(tokens), "tokenID");
+    return sortBy(list, "initiative");
+};
 const reduceToggleGridVisibility = (state: any, mapKey: string, gridRef: string) => {
     const current = { ...state[mapKey][gridRef] };
     return {
@@ -113,7 +119,8 @@ const reduceUpdateGridItems = (state: any, mapKey: string, gridRef: string, newI
             [gridRef]: {
                 ...state[mapKey][gridRef],
                 items: state[mapKey][gridRef].items.concat(newItem)
-            }
+            },
+            activeTokens: reduceAddTokensToList(state[mapKey].activeTokens, newItem)
         }
     };
 };
@@ -129,7 +136,8 @@ const reduceUpdateGridItem = (state: any, mapKey: string, gridRef: string, index
             [gridRef]: {
                 ...state[mapKey][gridRef],
                 items: items
-            }
+            },
+            activeTokens: reduceAddTokensToList(state[mapKey].activeTokens, newItem)
         }
     };
 };
