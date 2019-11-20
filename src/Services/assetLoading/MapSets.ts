@@ -192,6 +192,84 @@ export const MapSetsBase = {
                 noGrid: false
             }
         }
+    },
+    oneShot: {
+        groupKey: "oneShot",
+        groupName: "One Shot",
+        mapList: {
+            final: {
+                mapFile: "finalRoom1.png",
+                columns: 25,
+                rows: 25,
+                gridSize: 50,
+                displayName: "F1",
+                noGrid: false
+            },
+            manor: {
+                mapFile: "manor1.png",
+                columns: 25,
+                rows: 25,
+                gridSize: 50,
+                displayName: "M1",
+                noGrid: false
+            },
+            dock1: {
+                mapFile: "dock1.png",
+                columns: 5,
+                rows: 2,
+                gridSize: 350,
+                displayName: "dock",
+                noGrid: true
+            },
+            hut1: {
+                mapFile: "hut1.png",
+                columns: 5,
+                rows: 2,
+                gridSize: 350,
+                displayName: "hut",
+                noGrid: true
+            },
+            hut2: {
+                mapFile: "hut2.png",
+                columns: 10,
+                rows: 10,
+                gridSize: 125,
+                displayName: "Hut2",
+                noGrid: false
+            },
+            island: {
+                mapFile: "island1.png",
+                columns: 25,
+                rows: 25,
+                gridSize: 50,
+                noGrid: true,
+                displayName: "island"
+            },
+            island2: {
+                mapFile: "island2.png",
+                columns: 50,
+                rows: 25,
+                gridSize: 50,
+                noGrid: true,
+                displayName: "island 2"
+            },
+            hut3: {
+                mapFile: "hut3.png",
+                columns: 25,
+                rows: 11,
+                gridSize: 100,
+                noGrid: true,
+                displayName: "island 3"
+            },
+            manor2: {
+                mapFile: "manor2.png",
+                columns: 25,
+                rows: 11,
+                gridSize: 100,
+                noGrid: true,
+                displayName: "island 4"
+            }
+        }
     }
 };
 let MapSetScale: any = {};
