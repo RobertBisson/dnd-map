@@ -117,6 +117,14 @@ export const TokenSets = {
             baseArmor: () => 14,
             initiativeBonus: 3
         },
+        banshee: {
+            tokenFile: `monsterToken/undead/Banshee_9S9elVf.png`,
+            shortname: "Banshee",
+
+            baseHealth: () => Math.max(rollXD(13, 8), 50),
+            baseArmor: () => 12,
+            initiativeBonus: 2
+        },
         ghoul: {
             tokenFile: `monsterToken/Ghoul_iOmCIvm.png`,
             shortname: "Ghoul",
@@ -172,6 +180,22 @@ export const TokenSets = {
             baseHealth: () => Math.max(rollXD(1, 6) + 1, 3),
             baseArmor: () => 13,
             initiativeBonus: 1
+        },
+
+        giantSpider: {
+            tokenFile: `monsterToken/Giant Spider_gzGLPZC.png`,
+            shortname: "Giant Spider",
+            baseHealth: () => Math.max(rollXD(4, 10) + 4, 26),
+            baseArmor: () => 14,
+            initiativeBonus: 3
+        },
+
+        grick: {
+            tokenFile: `monsterToken/grick.jpg`,
+            shortname: "Grick",
+            baseHealth: () => Math.max(rollXD(6, 8), 25),
+            baseArmor: () => 14,
+            initiativeBonus: 2
         },
         youngGreenDragon: {
             tokenFile: `monsterToken/Green Dragon Wyrmling_O72WpHn.png`,
@@ -295,6 +319,15 @@ export const TokenSets = {
             baseHealth: () => rollXD(1, 8),
             baseArmor: () => 10,
             initiativeBonus: 0
+        },
+
+        cultist: {
+            tokenFile: `npcToken/cultist/cultist.png`,
+            randomToken: [`npcToken/cultist/cultist.png`, `npcToken/cultist/Cultist_J5YGpad.png`],
+            shortname: "Cultist",
+            baseHealth: () => Math.max(rollXD(2, 8), 9),
+            baseArmor: () => 12,
+            initiativeBonus: 1
         },
 
         bustyHalfOrc: {
