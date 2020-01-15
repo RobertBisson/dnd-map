@@ -166,6 +166,13 @@ export const TokenSets = {
             baseArmor: () => 25,
             initiativeBonus: 0
         },
+        twigBlight: {
+            tokenFile: `monsterToken/Twig Blight_1DHs31L.png`,
+            shortname: "Twig Blight",
+            baseHealth: () => Math.max(rollXD(1, 6) + 1, 3),
+            baseArmor: () => 13,
+            initiativeBonus: 1
+        },
         youngGreenDragon: {
             tokenFile: `monsterToken/Green Dragon Wyrmling_O72WpHn.png`,
             shortname: "JustInCase",
