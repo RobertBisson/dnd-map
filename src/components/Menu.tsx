@@ -6,6 +6,7 @@ import { throttle } from "lodash";
 interface MenuProps {
     align: "left" | "right";
     width: number;
+    children?: React.ReactNode;
 }
 interface MenuState {
     top: number;
@@ -15,7 +16,7 @@ interface MenuState {
 const getListStyle = (isDraggingOver: boolean) => ({
     background: isDraggingOver ? "lightblue" : "lightgrey"
 });
-export class Menu extends React.Component<React.PropsWithChildren<MenuProps>, MenuState> {
+export class Menu extends React.Component<MenuProps, MenuState> {
     static defaultProps = {
         align: "left",
         width: 120

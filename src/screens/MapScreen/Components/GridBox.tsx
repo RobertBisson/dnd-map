@@ -39,6 +39,33 @@ interface GridBoxState {
     showMonstersOther: boolean;
 }
 
+const MenuLabel = ({
+    label,
+    isVisible,
+    onMouseEnter,
+    onMouseLeave,
+    tokens,
+    renderAddTokenButton
+}: {
+    label: string;
+    isVisible: boolean;
+    onMouseEnter: () => void;
+    onMouseLeave: () => void;
+    tokens: any;
+    renderAddTokenButton: (token: any, index: number) => JSX.Element;
+}) => (
+    <div className={"context-action"} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+        <span>{label} {'>'}</span>
+        {isVisible && (
+            <div className={"players-menu"}>
+                {Object.keys(tokens).map((tokenName: string, index: number) => {
+                    return renderAddTokenButton(tokens[tokenName], index);
+                })}
+            </div>
+        )}
+    </div>
+);
+
 class GridBox extends React.Component<GridBoxProps, GridBoxState> {
     timeout: any = null;
     constructor(props: GridBoxProps) {
@@ -216,77 +243,23 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                         </button>
                         <hr />
 
-                        <div
-                            className={"context-action"}
-                            onMouseEnter={() => this.setState({ showPlayers: true })}
-                            onMouseLeave={() => this.setState({ showPlayers: false })}
-                        >
-                            <span>Players {'>'}</span>
-                            {this.state.showPlayers && (
-                                <div className={"players-menu"}>
-                                    {Object.keys(TokenSets.player).map((tokenName: string, index: number) => {
-                                        return this.renderAddTokenButton(TokenSets.player[tokenName], index);
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                        <hr />
-                        <div
-                            className={"context-action"}
-                            onMouseEnter={() => this.setState({ showMonsterHumanoid: true })}
-                            onMouseLeave={() => this.setState({ showMonsterHumanoid: false })}
-                        >
-                            <span>Humanoid {'>'}</span>
-                            {this.state.showMonsterHumanoid && (
-                                <div className={"players-menu"}>
-                                    {Object.keys(TokenSets.monster).map((tokenName: string, index: number) => {
-                                        return this.renderAddTokenButton(TokenSets.monster[tokenName], index);
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                        <div
-                            className={"context-action"}
-                            onMouseEnter={() => this.setState({ showMonsterUndead: true })}
-                            onMouseLeave={() => this.setState({ showMonsterUndead: false })}
-                        >
-                            <span>Undead {'>'}</span>
-                            {this.state.showMonsterUndead && (
-                                <div className={"players-menu"}>
-                                    {Object.keys(TokenSets.monsterUndead).map((tokenName: string, index: number) => {
-                                        return this.renderAddTokenButton(TokenSets.monsterUndead[tokenName], index);
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                        <div
-                            className={"context-action"}
-                            onMouseEnter={() => this.setState({ showMonstersOther: true })}
-                            onMouseLeave={() => this.setState({ showMonstersOther: false })}
-                        >
-                            <span>Monster {'>'}</span>
-                            {this.state.showMonstersOther && (
-                                <div className={"players-menu"}>
-                                    {Object.keys(TokenSets.monsterOther).map((tokenName: string, index: number) => {
-                                        return this.renderAddTokenButton(TokenSets.monsterOther[tokenName], index);
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                        <div
-                            className={"context-action"}
-                            onMouseEnter={() => this.setState({ showNPCs: true })}
-                            onMouseLeave={() => this.setState({ showNPCs: false })}
-                        >
-                            <span>NPCs {'>'}</span>
-                            {this.state.showNPCs && (
-                                <div className={"players-menu"}>
-                                    {Object.keys(TokenSets.npc).map((tokenName: string, index: number) => {
-                                        return this.renderAddTokenButton(TokenSets.npc[tokenName], index);
-                                    })}
-                                </div>
-                            )}
-                        </div>
+                        {[
+                            { label: "Players", stateKey: "showPlayers", tokens: TokenSets.player },
+                            { label: "Humanoid", stateKey: "showMonsterHumanoid", tokens: TokenSets.monster },
+                            { label: "Undead", stateKey: "showMonsterUndead", tokens: TokenSets.monsterUndead },
+                            { label: "Monster", stateKey: "showMonstersOther", tokens: TokenSets.monsterOther },
+                            { label: "NPCs", stateKey: "showNPCs", tokens: TokenSets.npc }
+                        ].map(({ label, stateKey, tokens }) => (
+                            <MenuLabel
+                                key={label}
+                                label={label}
+                                isVisible={this.state[stateKey]}
+                                onMouseEnter={() => this.setState({ [stateKey]: true })}
+                                onMouseLeave={() => this.setState({ [stateKey]: false })}
+                                tokens={tokens}
+                                renderAddTokenButton={this.renderAddTokenButton}
+                            />
+                        ))}
                     </div>
                 )}
             </div>
