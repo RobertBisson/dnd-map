@@ -2,8 +2,8 @@ import React from "react";
 import { Draggable } from "@hello-pangea/dnd";
 import { connect } from "react-redux";
 import { Token } from "Services/assetLoading/TokenSets";
+import { v1 as uuidv1 } from "uuid";
 
-const uuid = require("uuid/v1");
 interface TokenProps {
     token: Token;
     tokenID: string;
@@ -21,19 +21,22 @@ interface TokenState {
     focused: boolean;
 }
 
-export default class CharToken extends React.PureComponent<TokenProps, TokenState> {
+export default class CharToken extends React.PureComponent<
+    TokenProps,
+    TokenState
+> {
     uniqKey: string = "";
     timeout: any = null;
     constructor(props: TokenProps) {
         super(props);
-        this.uniqKey = uuid();
+        this.uniqKey = uuidv1();
         if (props.token) {
             this.loadToken();
         }
         this.state = {
             token: "",
             showContextMenu: false,
-            focused: false
+            focused: false,
         };
     }
 
@@ -41,11 +44,11 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
         const { token } = this.props;
         import(`../assets/${token.tokenFile}`).then((image: any) =>
             this.setState({
-                token: image.default
+                token: image.default,
             })
         );
     };
-    handleContext = e => {
+    handleContext = (e) => {
         e.preventDefault();
         e.stopPropagation();
         this.setState({ showContextMenu: true });
@@ -60,22 +63,25 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
     onMouseExit = () => {
         this.timeout = setTimeout(() => {
             this.setState({
-                showContextMenu: false
+                showContextMenu: false,
             });
         }, 500);
     };
     handleKill = () => {
         this.setState({
-            showContextMenu: false
+            showContextMenu: false,
         });
         this.props.kill(this.props.tokenID, this.props.tokenIndex);
     };
     handleWound = () => {
         const { token } = this.props;
         this.setState({
-            showContextMenu: false
+            showContextMenu: false,
         });
-        this.props.updateItem(this.props.tokenID, this.props.tokenIndex, { ...token, wounded: !token.wounded });
+        this.props.updateItem(this.props.tokenID, this.props.tokenIndex, {
+            ...token,
+            wounded: !token.wounded,
+        });
     };
 
     handleClick = () => {
@@ -95,7 +101,11 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
 
         return (
             <React.Fragment>
-                <Draggable key={this.uniqKey} draggableId={tokenID} index={tokenIndex}>
+                <Draggable
+                    key={this.uniqKey}
+                    draggableId={tokenID}
+                    index={tokenIndex}
+                >
                     {(provided, snapshot) => (
                         <div
                             ref={provided.innerRef}
@@ -109,11 +119,13 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
                                 zIndex: 100,
                                 boxSizing: "border-box",
                                 borderRadius: "50%",
-                                ...provided.draggableProps.style
+                                ...provided.draggableProps.style,
                             }}
                         >
                             <div
-                                className={`token ${wounded ? "wounded" : ""} ${selected ? "selected" : ""} `}
+                                className={`token ${wounded ? "wounded" : ""} ${
+                                    selected ? "selected" : ""
+                                } `}
                                 onContextMenu={this.handleContext}
                                 onClick={this.handleClick}
                             >
@@ -126,11 +138,17 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
                                         boxSizing: "border-box",
 
                                         ...(token.addBackground
-                                            ? { backgroundColor: "#fcfcfc", border: "3px solid #ba966d" }
-                                            : {})
+                                            ? {
+                                                  backgroundColor: "#fcfcfc",
+                                                  border: "3px solid #ba966d",
+                                              }
+                                            : {}),
                                     }}
                                 />
-                                <div className={`color-ident`} style={{ backgroundColor: token.color }} />
+                                <div
+                                    className={`color-ident`}
+                                    style={{ backgroundColor: token.color }}
+                                />
                             </div>
                         </div>
                     )}
@@ -142,15 +160,21 @@ export default class CharToken extends React.PureComponent<TokenProps, TokenStat
 
                             background: "#fcfcfc",
                             boxShadow: "1px 1px 1px #444",
-                            zIndex: 200
+                            zIndex: 200,
                         }}
                         onMouseEnter={this.onMouseOver}
                         onMouseLeave={this.onMouseExit}
                     >
-                        <button className="context-action" onClick={this.handleKill}>
+                        <button
+                            className="context-action"
+                            onClick={this.handleKill}
+                        >
                             Kill
                         </button>
-                        <button className="context-action" onClick={this.handleWound}>
+                        <button
+                            className="context-action"
+                            onClick={this.handleWound}
+                        >
                             {wounded ? "Heal" : "Wound"}
                         </button>
                     </div>

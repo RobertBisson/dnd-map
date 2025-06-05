@@ -9,7 +9,8 @@ import { TokenSets, TokenBase, Token } from "Services/assetLoading/TokenSets";
 
 import { sample } from "lodash";
 import { rollD } from "Services/util/RollUtil";
-const uuid = require("uuid/v1");
+import { v1 as uuidv1 } from "uuid";
+
 interface GridBoxProps {
     gridKey: string;
     mapKey: string;
@@ -125,12 +126,12 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
     handleAddToken = (token: TokenBase) => {
         let newCharToken: Partial<Token> = {
             ...token,
-            tokenID: uuid(),
-            color: "#000000".replace(/0/g, function() {
+            tokenID: uuidv1(),
+            color: "#000000".replace(/0/g, function () {
                 return (~~(Math.random() * 16)).toString(16);
             }),
             health: -1,
-            armor: -1
+            armor: -1,
         };
 
         if (token.randomToken) {
@@ -194,7 +195,9 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                                 width: gridSize,
                                 height: gridSize,
                                 border:
-                                    noGrid === true ? "1px solid transparent" : "1px groove rgba(136, 136, 136, 0.5)",
+                                    noGrid === true
+                                        ? "1px solid transparent"
+                                        : "1px groove rgba(136, 136, 136, 0.5)",
                                 boxSizing: "border-box",
                                 flexDirection: "row",
                                 flexWrap: "wrap",
@@ -204,9 +207,13 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                                 overflow: "visible",
                                 alignItems: "center",
                                 zIndex: 1,
-                                ...(!visible ? { background: "#000", opacity: 1 } : {})
+                                ...(!visible
+                                    ? { background: "#000", opacity: 1 }
+                                    : {}),
                             }}
-                            className={`${this.state.blockLeaving ? "blocked" : ""}`}
+                            className={`${
+                                this.state.blockLeaving ? "blocked" : ""
+                            }`}
                             onContextMenu={this.handleContext}
                         >
                             {visible &&
@@ -223,7 +230,10 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                                         updateItem={this.handleUpdateToken}
                                         onSelect={this.props.selectItem}
                                         onDeselect={this.props.deselectItem}
-                                        selected={this.props.selectedTokenID === token.tokenID}
+                                        selected={
+                                            this.props.selectedTokenID ===
+                                            token.tokenID
+                                        }
                                     />
                                 ))}
                             {provided.placeholder}
@@ -234,28 +244,60 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                     <div
                         className={"context-wrapper"}
                         style={{
-                            top: gridSize / 2
+                            top: gridSize / 2,
                         }}
                         onMouseEnter={this.onMouseOver}
                     >
-                        <button className="context-action" onClick={this.handleVisibilityToggle}>
+                        <button
+                            className="context-action"
+                            onClick={this.handleVisibilityToggle}
+                        >
                             Visible
                         </button>
                         <hr />
-
                         {[
-                            { label: "Players", stateKey: "showPlayers", tokens: TokenSets.player },
-                            { label: "Humanoid", stateKey: "showMonsterHumanoid", tokens: TokenSets.monster },
-                            { label: "Undead", stateKey: "showMonsterUndead", tokens: TokenSets.monsterUndead },
-                            { label: "Monster", stateKey: "showMonstersOther", tokens: TokenSets.monsterOther },
-                            { label: "NPCs", stateKey: "showNPCs", tokens: TokenSets.npc }
+                            {
+                                label: "Players",
+                                stateKey: "showPlayers",
+                                tokens: TokenSets.player,
+                            },
+                            {
+                                label: "Humanoid",
+                                stateKey: "showMonsterHumanoid",
+                                tokens: TokenSets.monster,
+                            },
+                            {
+                                label: "Undead",
+                                stateKey: "showMonsterUndead",
+                                tokens: TokenSets.monsterUndead,
+                            },
+                            {
+                                label: "Monster",
+                                stateKey: "showMonstersOther",
+                                tokens: TokenSets.monsterOther,
+                            },
+                            {
+                                label: "NPCs",
+                                stateKey: "showNPCs",
+                                tokens: TokenSets.npc,
+                            },
                         ].map(({ label, stateKey, tokens }) => (
                             <MenuLabel
                                 key={label}
                                 label={label}
                                 isVisible={this.state[stateKey]}
-                                onMouseEnter={() => this.setState({ [stateKey]: true })}
-                                onMouseLeave={() => this.setState({ [stateKey]: false })}
+                                onMouseEnter={() =>
+                                    this.setState((prev) => ({
+                                        ...prev,
+                                        [stateKey]: true,
+                                    }))
+                                }
+                                onMouseLeave={() =>
+                                    this.setState((prev) => ({
+                                        ...prev,
+                                        [stateKey]: false,
+                                    }))
+                                }
                                 tokens={tokens}
                                 renderAddTokenButton={this.renderAddTokenButton}
                             />
