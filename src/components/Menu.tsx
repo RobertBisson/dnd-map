@@ -1,5 +1,5 @@
 import React from "react";
-import { Droppable } from "react-beautiful-dnd";
+import { Droppable } from "@hello-pangea/dnd";
 import CharToken from "./CharToken";
 import { throttle } from "lodash";
 
@@ -15,7 +15,7 @@ interface MenuState {
 const getListStyle = (isDraggingOver: boolean) => ({
     background: isDraggingOver ? "lightblue" : "lightgrey"
 });
-export class Menu extends React.Component<MenuProps, MenuState> {
+export class Menu extends React.Component<React.PropsWithChildren<MenuProps>, MenuState> {
     static defaultProps = {
         align: "left",
         width: 120

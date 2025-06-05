@@ -4,10 +4,9 @@ import { connect } from "react-redux";
 import { MapSets } from "../../Services/assetLoading/MapSets";
 import Image from "assets/wave.jpg";
 
-import { Droppable } from "react-beautiful-dnd";
+import { Droppable, DragDropContext } from "@hello-pangea/dnd";
 import CharToken from "components/CharToken";
 import { TokenSets } from "Services/assetLoading/TokenSets";
-import { DragDropContext } from "react-beautiful-dnd";
 
 import GridBox from "./Components/GridBox";
 import { getKeyforGridRef } from "Services/util/GridUtil";

@@ -1,1 +1,1 @@
-/// <reference types="react-scripts" />
+// (empty for Vite, remove react-scripts reference)

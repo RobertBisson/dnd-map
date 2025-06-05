@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Droppable } from "react-beautiful-dnd";
+import { Droppable } from "@hello-pangea/dnd";
 import CharToken from "components/CharToken";
 import { ContextMenuTrigger, ContextMenu } from "react-contextmenu";
 
@@ -221,7 +221,7 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                             onMouseEnter={() => this.setState({ showPlayers: true })}
                             onMouseLeave={() => this.setState({ showPlayers: false })}
                         >
-                            <span>Players ></span>
+                            <span>Players {'>'}</span>
                             {this.state.showPlayers && (
                                 <div className={"players-menu"}>
                                     {Object.keys(TokenSets.player).map((tokenName: string, index: number) => {
@@ -236,7 +236,7 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                             onMouseEnter={() => this.setState({ showMonsterHumanoid: true })}
                             onMouseLeave={() => this.setState({ showMonsterHumanoid: false })}
                         >
-                            <span>Humanoid ></span>
+                            <span>Humanoid {'>'}</span>
                             {this.state.showMonsterHumanoid && (
                                 <div className={"players-menu"}>
                                     {Object.keys(TokenSets.monster).map((tokenName: string, index: number) => {
@@ -250,7 +250,7 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                             onMouseEnter={() => this.setState({ showMonsterUndead: true })}
                             onMouseLeave={() => this.setState({ showMonsterUndead: false })}
                         >
-                            <span>Undead ></span>
+                            <span>Undead {'>'}</span>
                             {this.state.showMonsterUndead && (
                                 <div className={"players-menu"}>
                                     {Object.keys(TokenSets.monsterUndead).map((tokenName: string, index: number) => {
@@ -264,7 +264,7 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                             onMouseEnter={() => this.setState({ showMonstersOther: true })}
                             onMouseLeave={() => this.setState({ showMonstersOther: false })}
                         >
-                            <span>Monster ></span>
+                            <span>Monster {'>'}</span>
                             {this.state.showMonstersOther && (
                                 <div className={"players-menu"}>
                                     {Object.keys(TokenSets.monsterOther).map((tokenName: string, index: number) => {
@@ -278,7 +278,7 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                             onMouseEnter={() => this.setState({ showNPCs: true })}
                             onMouseLeave={() => this.setState({ showNPCs: false })}
                         >
-                            <span>NPCs ></span>
+                            <span>NPCs {'>'}</span>
                             {this.state.showNPCs && (
                                 <div className={"players-menu"}>
                                     {Object.keys(TokenSets.npc).map((tokenName: string, index: number) => {
