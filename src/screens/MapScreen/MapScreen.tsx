@@ -2,12 +2,10 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { MapSets } from "../../Services/assetLoading/MapSets";
-import Image from "assets/wave.jpg";
 
-import { Droppable } from "react-beautiful-dnd";
+import { Droppable, DragDropContext } from "@hello-pangea/dnd";
 import CharToken from "components/CharToken";
 import { TokenSets } from "Services/assetLoading/TokenSets";
-import { DragDropContext } from "react-beautiful-dnd";
 
 import GridBox from "./Components/GridBox";
 import { getKeyforGridRef } from "Services/util/GridUtil";
@@ -56,11 +54,17 @@ class MapScreen extends React.Component<MapScreenProps, MapScreenState> {
     loadImage = async () => {
         const { activeMap } = this.props;
         if (!activeMap.animated) {
-            import(`../../assets/${activeMap.mapFile}`).then((image: any) => {
+            try {
+                const image = await import(
+                    /* @vite-ignore */ `../../assets/${activeMap.mapFile}`
+                );
                 this.setState({
-                    mapImage: image.default
+                    mapImage: image.default,
                 });
-            });
+            } catch (err) {
+                console.error("Failed to load map image:", err);
+                this.setState({ mapImage: null });
+            }
         } else {
             this.setState({
                 mapImage: null

@@ -1,11 +1,12 @@
 import React from "react";
-import { Droppable } from "react-beautiful-dnd";
+import { Droppable } from "@hello-pangea/dnd";
 import CharToken from "./CharToken";
 import { throttle } from "lodash";
 
 interface MenuProps {
     align: "left" | "right";
     width: number;
+    children?: React.ReactNode;
 }
 interface MenuState {
     top: number;

@@ -1,68 +1,47 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# DnD Map
 
-## Available Scripts
+This project is a virtual tabletop map tool for Dungeons & Dragons, built with React, Redux, and Vite. It allows Dungeon Masters to manage battle maps, tokens, and visibility for online or in-person play.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Battle Map Management**: Load and switch between multiple maps, grouped by campaign acts or one-shots.
+- **Grid System**: Each map supports a configurable grid for token placement and movement.
+- **Token Management**: Add, move, and remove player, NPC, and monster tokens. Tokens have stats like health, armor, and initiative.
+- **Drag-and-Drop**: Move tokens between grid squares using drag-and-drop (powered by `@hello-pangea/dnd`).
+- **Visibility Controls**: Toggle grid square visibility for fog-of-war effects, including quick reveal/hide with keyboard/mouse shortcuts.
+- **Persistent State**: All map and token states are saved in local storage and synced across browser tabs.
+- **DM Tools**: Dedicated DM panel for character sheets and quick stat reference.
+- **Animated Maps**: Support for embedding animated/YouTube maps.
+- **Context Menus**: Right-click context menus for grid squares and tokens for quick actions (add, wound, kill, etc).
+- **Customizable Assets**: Easily add new maps and tokens by placing images in the assets folder and updating config files.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Getting Started
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+### Scripts
 
-### `npm test`
+- `npm start` — Runs the app in development mode at [http://localhost:5173](http://localhost:5173) (Vite default).
+- `npm run build` — Builds the app for production to the `build` folder.
+- `npm run preview` — Previews the production build locally.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Requirements
 
-### `npm run build`
+- Node.js and npm installed.
+- Place your map and token images in the `src/assets` directory.
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Project Structure
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- `src/screens/MapScreen/` — Main map and grid logic.
+- `src/components/CharToken.tsx` — Token rendering and interaction.
+- `src/Services/assetLoading/MapSets.ts` — Map definitions and groupings.
+- `src/Services/assetLoading/TokenSets.ts` — Token definitions for monsters, NPCs, and players.
+- `src/Services/store/` — Redux store and reducers for state management.
 
 ## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- [React documentation](https://reactjs.org/)
+- [Redux documentation](https://redux.js.org/)
+- [Vite documentation](https://vitejs.dev/)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## License
 
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+This project is for personal use and not intended for commercial distribution.

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Droppable } from "react-beautiful-dnd";
+import { Droppable } from "@hello-pangea/dnd";
 import CharToken from "components/CharToken";
 import { ContextMenuTrigger, ContextMenu } from "react-contextmenu";
 
@@ -9,7 +9,8 @@ import { TokenSets, TokenBase, Token } from "Services/assetLoading/TokenSets";
 
 import { sample } from "lodash";
 import { rollD } from "Services/util/RollUtil";
-const uuid = require("uuid/v1");
+import { v1 as uuidv1 } from "uuid";
+
 interface GridBoxProps {
     gridKey: string;
     mapKey: string;
@@ -38,6 +39,33 @@ interface GridBoxState {
     showMonsterUndead: boolean;
     showMonstersOther: boolean;
 }
+
+const MenuLabel = ({
+    label,
+    isVisible,
+    onMouseEnter,
+    onMouseLeave,
+    tokens,
+    renderAddTokenButton
+}: {
+    label: string;
+    isVisible: boolean;
+    onMouseEnter: () => void;
+    onMouseLeave: () => void;
+    tokens: any;
+    renderAddTokenButton: (token: any, index: number) => JSX.Element;
+}) => (
+    <div className={"context-action"} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+        <span>{label} {'>'}</span>
+        {isVisible && (
+            <div className={"players-menu"}>
+                {Object.keys(tokens).map((tokenName: string, index: number) => {
+                    return renderAddTokenButton(tokens[tokenName], index);
+                })}
+            </div>
+        )}
+    </div>
+);
 
 class GridBox extends React.Component<GridBoxProps, GridBoxState> {
     timeout: any = null;
@@ -98,12 +126,12 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
     handleAddToken = (token: TokenBase) => {
         let newCharToken: Partial<Token> = {
             ...token,
-            tokenID: uuid(),
-            color: "#000000".replace(/0/g, function() {
+            tokenID: uuidv1(),
+            color: "#000000".replace(/0/g, function () {
                 return (~~(Math.random() * 16)).toString(16);
             }),
             health: -1,
-            armor: -1
+            armor: -1,
         };
 
         if (token.randomToken) {
@@ -167,7 +195,9 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                                 width: gridSize,
                                 height: gridSize,
                                 border:
-                                    noGrid === true ? "1px solid transparent" : "1px groove rgba(136, 136, 136, 0.5)",
+                                    noGrid === true
+                                        ? "1px solid transparent"
+                                        : "1px groove rgba(136, 136, 136, 0.5)",
                                 boxSizing: "border-box",
                                 flexDirection: "row",
                                 flexWrap: "wrap",
@@ -177,9 +207,13 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                                 overflow: "visible",
                                 alignItems: "center",
                                 zIndex: 1,
-                                ...(!visible ? { background: "#000", opacity: 1 } : {})
+                                ...(!visible
+                                    ? { background: "#000", opacity: 1 }
+                                    : {}),
                             }}
-                            className={`${this.state.blockLeaving ? "blocked" : ""}`}
+                            className={`${
+                                this.state.blockLeaving ? "blocked" : ""
+                            }`}
                             onContextMenu={this.handleContext}
                         >
                             {visible &&
@@ -196,7 +230,10 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                                         updateItem={this.handleUpdateToken}
                                         onSelect={this.props.selectItem}
                                         onDeselect={this.props.deselectItem}
-                                        selected={this.props.selectedTokenID === token.tokenID}
+                                        selected={
+                                            this.props.selectedTokenID ===
+                                            token.tokenID
+                                        }
                                     />
                                 ))}
                             {provided.placeholder}
@@ -207,86 +244,64 @@ class GridBox extends React.Component<GridBoxProps, GridBoxState> {
                     <div
                         className={"context-wrapper"}
                         style={{
-                            top: gridSize / 2
+                            top: gridSize / 2,
                         }}
                         onMouseEnter={this.onMouseOver}
                     >
-                        <button className="context-action" onClick={this.handleVisibilityToggle}>
+                        <button
+                            className="context-action"
+                            onClick={this.handleVisibilityToggle}
+                        >
                             Visible
                         </button>
                         <hr />
-
-                        <div
-                            className={"context-action"}
-                            onMouseEnter={() => this.setState({ showPlayers: true })}
-                            onMouseLeave={() => this.setState({ showPlayers: false })}
-                        >
-                            <span>Players ></span>
-                            {this.state.showPlayers && (
-                                <div className={"players-menu"}>
-                                    {Object.keys(TokenSets.player).map((tokenName: string, index: number) => {
-                                        return this.renderAddTokenButton(TokenSets.player[tokenName], index);
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                        <hr />
-                        <div
-                            className={"context-action"}
-                            onMouseEnter={() => this.setState({ showMonsterHumanoid: true })}
-                            onMouseLeave={() => this.setState({ showMonsterHumanoid: false })}
-                        >
-                            <span>Humanoid ></span>
-                            {this.state.showMonsterHumanoid && (
-                                <div className={"players-menu"}>
-                                    {Object.keys(TokenSets.monster).map((tokenName: string, index: number) => {
-                                        return this.renderAddTokenButton(TokenSets.monster[tokenName], index);
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                        <div
-                            className={"context-action"}
-                            onMouseEnter={() => this.setState({ showMonsterUndead: true })}
-                            onMouseLeave={() => this.setState({ showMonsterUndead: false })}
-                        >
-                            <span>Undead ></span>
-                            {this.state.showMonsterUndead && (
-                                <div className={"players-menu"}>
-                                    {Object.keys(TokenSets.monsterUndead).map((tokenName: string, index: number) => {
-                                        return this.renderAddTokenButton(TokenSets.monsterUndead[tokenName], index);
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                        <div
-                            className={"context-action"}
-                            onMouseEnter={() => this.setState({ showMonstersOther: true })}
-                            onMouseLeave={() => this.setState({ showMonstersOther: false })}
-                        >
-                            <span>Monster ></span>
-                            {this.state.showMonstersOther && (
-                                <div className={"players-menu"}>
-                                    {Object.keys(TokenSets.monsterOther).map((tokenName: string, index: number) => {
-                                        return this.renderAddTokenButton(TokenSets.monsterOther[tokenName], index);
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                        <div
-                            className={"context-action"}
-                            onMouseEnter={() => this.setState({ showNPCs: true })}
-                            onMouseLeave={() => this.setState({ showNPCs: false })}
-                        >
-                            <span>NPCs ></span>
-                            {this.state.showNPCs && (
-                                <div className={"players-menu"}>
-                                    {Object.keys(TokenSets.npc).map((tokenName: string, index: number) => {
-                                        return this.renderAddTokenButton(TokenSets.npc[tokenName], index);
-                                    })}
-                                </div>
-                            )}
-                        </div>
+                        {[
+                            {
+                                label: "Players",
+                                stateKey: "showPlayers",
+                                tokens: TokenSets.player,
+                            },
+                            {
+                                label: "Humanoid",
+                                stateKey: "showMonsterHumanoid",
+                                tokens: TokenSets.monster,
+                            },
+                            {
+                                label: "Undead",
+                                stateKey: "showMonsterUndead",
+                                tokens: TokenSets.monsterUndead,
+                            },
+                            {
+                                label: "Monster",
+                                stateKey: "showMonstersOther",
+                                tokens: TokenSets.monsterOther,
+                            },
+                            {
+                                label: "NPCs",
+                                stateKey: "showNPCs",
+                                tokens: TokenSets.npc,
+                            },
+                        ].map(({ label, stateKey, tokens }) => (
+                            <MenuLabel
+                                key={label}
+                                label={label}
+                                isVisible={this.state[stateKey]}
+                                onMouseEnter={() =>
+                                    this.setState((prev) => ({
+                                        ...prev,
+                                        [stateKey]: true,
+                                    }))
+                                }
+                                onMouseLeave={() =>
+                                    this.setState((prev) => ({
+                                        ...prev,
+                                        [stateKey]: false,
+                                    }))
+                                }
+                                tokens={tokens}
+                                renderAddTokenButton={this.renderAddTokenButton}
+                            />
+                        ))}
                     </div>
                 )}
             </div>
